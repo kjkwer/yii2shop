@@ -10,6 +10,9 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    'defaultRoute'=>'text/list',//设置默认路由
+    'language'=>'zh-CN',  //设置语言
+    'timeZone' => 'Asia/Shanghai',  //设置时区
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
@@ -37,14 +40,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

@@ -16,6 +16,7 @@ use yii\web\Request;
 
 class ArticleCategoryController extends Controller
 {
+    //>>显示文章分类列表
     public function actionList(){
         //>>创建模型对象
         $model = new ArticleCategory();
@@ -31,6 +32,7 @@ class ArticleCategoryController extends Controller
             "pager"=>$pager
         ]);
     }
+    //>>>添加文章分类
     public function actionAdd(){
         //>>创建模型对象
         $model = new ArticleCategory();
@@ -53,6 +55,7 @@ class ArticleCategoryController extends Controller
             "model"=>$model
         ]);
     }
+    //>>更新
     public function actionUpd($id){
         //>>创建模型对象
         $model = ArticleCategory::findOne($id);
@@ -75,6 +78,7 @@ class ArticleCategoryController extends Controller
             "model"=>$model
         ]);
     }
+    //>>删除
     public function actionDel(){
         //>>接收数据
         $request = new Request();
@@ -87,5 +91,21 @@ class ArticleCategoryController extends Controller
         }else{
             echo "数据不存在";
         };
+    }
+    //>>回收站
+    public function actionRecycle(){
+        //>>创建模型对象
+        $model = new ArticleCategory();
+        //>>创建分页工具
+        $pager = new Pagination();
+        $pager->pageSize=4;
+        $pager->totalCount=$model->find()->count();
+        $articeCategoryList = $model->find()->andwhere(["=","status","-1"])->limit($pager->limit)->offset($pager->offset)->all();
+        //var_dump($brandList);exit();
+        //>>显示页面
+        return $this->render("recycle",[
+            "articeCategoryList"=>$articeCategoryList,
+            "pager"=>$pager
+        ]);
     }
 }

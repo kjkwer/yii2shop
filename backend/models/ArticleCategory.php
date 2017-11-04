@@ -27,6 +27,8 @@ class ArticleCategory extends ActiveRecord
             [['name','intro','status'],'required']
         ];
     }
+    //>>将取出的数组转换为数组  ["id"=>"name","id"=>"name"...]的形式,
+    //>>当新建文章时,作为下拉选择所述酚类时使用
     public static function categoryOne(){
         return ArrayHelper::map(self::find()->andWhere(["!=","status","-1"])->asArray()->all(),"id","name");
     }

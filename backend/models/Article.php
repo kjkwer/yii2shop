@@ -27,7 +27,7 @@ class Article extends ActiveRecord
             [["name","intro","article_category_id","status"],"required"]
         ];
     }
-    //>>获取文章的所述分类
+    //>>获取文章的所属分类
     public function getCategory(){
         return $this->hasOne(ArticleCategory::className(),["id"=>"article_category_id"]);
     }

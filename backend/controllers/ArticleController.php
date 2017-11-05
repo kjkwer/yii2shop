@@ -66,15 +66,17 @@ class ArticleController extends Controller
     public function actionDel(){
         //>>接收数据
         $request = new Request();
-        $id = $request->post("id");
-        //>>删除数据
-        if ($brand = Article::findOne(["id"=>$id])){
-            $brand->status = -1;
-            $brand->save();
-            echo 1;
-        }else{
-            echo "数据不存在";
-        };
+        if ($request->isPost){
+            $id = $request->post("id");
+            //>>查看数据属否存在
+            if ($brand = Article::findOne(["id"=>$id])){
+                $brand->status = -1;
+                $brand->save();
+                echo 1;
+            }else{
+                echo "数据不存在";
+            };
+        }
     }
     //>>更新文件
     public function actionUpd($id){

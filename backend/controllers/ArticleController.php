@@ -11,6 +11,7 @@ namespace backend\controllers;
 
 use backend\models\Article;
 use backend\models\ArticleDetail;
+use kucha\ueditor\UEditorAction;
 use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\Request;
@@ -122,5 +123,19 @@ class ArticleController extends Controller
             "articleList"=>$articleList,
             "pager"=>$pager
         ]);
+    }
+    //>>绑定文本编辑器的行为
+    public function actions()
+    {
+        return [
+            'upload' => [
+                'class' => UEditorAction::className(),
+                'config' => [
+                    "imageUrlPrefix"  => \Yii::getAlias("@web"),//图片访问路径前缀
+                    "imagePathFormat" => "/article_intro_images/{yyyy}{mm}{dd}/{time}{rand:6}", //上传保存路径
+                    "imageRoot" => \Yii::getAlias("@webroot")
+                ],
+            ]
+        ];
     }
 }

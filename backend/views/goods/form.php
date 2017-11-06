@@ -25,7 +25,6 @@ echo $form->field($goodsModel,"market_price")->textInput();
 echo $form->field($goodsModel,"shop_price")->textInput();
 echo $form->field($goodsModel,"stock")->textInput();
 echo $form->field($goodsModel,"is_on_sale",["inline"=>true])->radioList([0=>"下架",1=>"在售"]);
-echo $form->field($goodsModel,"status",["inline"=>true])->radioList([0=>"正常",1=>"回收站"]);
 echo $form->field($goodsModel,"sort")->textInput();
 echo $form->field($goodsIntroModel,"content")->widget(\kucha\ueditor\UEditor::className(),[]);
 echo \yii\bootstrap\Html::submitButton("提交",["class"=>'btn btn-info']);
@@ -96,8 +95,8 @@ $this->registerJs(
         });
         // 文件上传成功，给item添加成功class, 用样式标记上传成功。
         uploader.on( 'uploadSuccess', function(file,data) {
-           console.log(file);
-           console.log(data);
+           //console.log(file);
+           //console.log(data);
            if (data.success){
                $("#img").attr("src",data.src);
                $("#goods-logo").val(data.src);

@@ -24,13 +24,12 @@ class Goods extends ActiveRecord
             "shop_price"=>"商品价格",
             "stock"=>"库存",
             "is_on_sale"=>"是否在售",
-            "status"=>"状态",
             "sort"=>"排序",
         ];
     }
     public function rules(){
         return [
-            [["name","sn","logo","goods_category_id","brand_id","market_price","shop_price","stock","is_on_sale","status"],"required"],
+            [["name","sn","logo","goods_category_id","brand_id","market_price","shop_price","stock","is_on_sale"],"required"],
             [["goods_category_id"],"compare","compareValue"=>0,"operator"=>">","message"=>"所属分类不能为空"],
             [["market_price","shop_price"],"double"],
             [["stock","sort"],"integer"],

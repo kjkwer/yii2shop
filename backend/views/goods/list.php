@@ -14,6 +14,7 @@ header('content-type:text/html;charset=utf-8');
                     <th>品牌</th>
                     <th>价格</th>
                     <th>库存</th>
+                    <th>上线状态</th>
                     <th>Logo</th>
                     <th>操作</th>
                 </tr>
@@ -28,9 +29,13 @@ header('content-type:text/html;charset=utf-8');
                         <td><?=$goods->brand->name?></td>
                         <td><?=$goods->shop_price?></td>
                         <td><?=$goods->stock?></td>
+                        <td><?=$goods->is_on_sale==1?"在售":"下架"?></td>
                         <td><?=\yii\bootstrap\Html::img($goods->logo,["width"=>"40px","height"=>"40px","class"=>"img-circle"])?></td>
                         <td>
-                            <?=\yii\bootstrap\Html::a("删除",["/goods/del"],["class"=>"del btn btn-warning btn-xs"])?>
+                            <?=\yii\bootstrap\Html::button("删除",["class"=>"del btn btn-warning btn-xs"])?>
+                            <?=\yii\bootstrap\Html::a("修改",\yii\helpers\Url::to(["/goods/upd","id"=>$goods->id]),["class"=>"btn btn-success btn-xs"])?>
+                            <?=\yii\bootstrap\Html::a("预览",\yii\helpers\Url::to(["/goods/preview","id"=>$goods->id]),["class"=>"btn btn-info btn-xs"])?>
+                            <?=\yii\bootstrap\Html::a("图库",\yii\helpers\Url::to(["/goods/images-list","id"=>$goods->id]),["class"=>"btn btn-default btn-xs"])?>
                         </td>
                     </tr>
                 <?php endforeach;?>
@@ -55,3 +60,22 @@ header('content-type:text/html;charset=utf-8');
 /**
  * @var $this \yii\web\View
  */
+$url = \yii\helpers\Url::to("/goods/del");
+$this->registerJs(<<<JS
+//>>给删除按钮添加点击事件
+$(".del").click(function() {
+    if (confirm("删除后数据无法恢复,是否继续?")){
+        var id = $(this).closest("tr").find("td:first-child").text();
+        var that = $(this);
+        $.post("{$url}",{"id":id},function(data) {
+            if (data==1){
+                alert("删除成功");
+                that.closest("tr").fadeOut();
+            }else {
+                alert(data);
+            }
+        })
+    }
+})
+JS
+);

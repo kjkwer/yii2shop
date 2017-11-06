@@ -11,6 +11,7 @@ namespace backend\controllers;
 
 use backend\models\Goods;
 use backend\models\GoodsDayCount;
+use backend\models\GoodsGallery;
 use backend\models\GoodsIntro;
 use kucha\ueditor\UEditorAction;
 use yii\data\Pagination;
@@ -30,7 +31,7 @@ class GoodsController extends Controller
         $pager->totalCount = $goodsModel->find()->count();
         $pager->pageSize = 4;
         //>>获取每页的数据
-        $goodsList = $goodsModel->find()->orderBy(["id"=>"desc"])->limit($pager->limit)->offset($pager->offset)->all();
+        $goodsList = $goodsModel->find()->andWhere(["=","status","1"])->orderBy("sn desc")->limit($pager->limit)->offset($pager->offset)->all();
         //>>显示视图
         return $this->render("list",[
             "goodsList"=>$goodsList,
@@ -67,6 +68,7 @@ class GoodsController extends Controller
             //>>验证数据
             if ($goodsModel->validate() && $goodsIntroModel->validate()){
                 //>>验证通过,保存数据
+                $goodsModel->status = 1;
                 $goodsModel->create_time = time();
                 $goodsModel->save();
                 $goodsIntroModel->goods_id = $goodsModel->id;
@@ -91,14 +93,54 @@ class GoodsController extends Controller
         ]);
     }
     //>>更新商品
-    public function actionUpd(){
-        echo "upd";
+    public function actionUpd($id){
+        //>>创建模型对象
+        $goodsModel = Goods::findOne(["id"=>$id]);
+        $goodsIntroModel = GoodsIntro::findOne(["goods_id"=>$id]);
+        //>>判断请求方式
+        $request = new Request();
+        if ($request->isPost){
+            $goodsModel->load($request->post());
+            $goodsIntroModel->load($request->post());
+            if ($goodsModel->validate() && $goodsIntroModel->validate()){
+                $goodsModel->save();
+                $goodsIntroModel->save();
+                //>>保存成功,跳转页面
+                \Yii::$app->session->setFlash("success","添加成功");
+                return $this->redirect("list");
+            }else{
+                //>>验证失败,打印错误信息
+                var_dump($goodsModel->getErrors());
+                var_dump($goodsIntroModel->getErrors());
+                exit();
+            }
+        }
+        //>>显示视图页面
+        return $this->render("form",[
+            "goodsModel"=>$goodsModel,
+            "goodsIntroModel"=>$goodsIntroModel
+        ]);
     }
     //>>删除商品
     public function actionDel(){
-        echo "del";
+        //>>判断请求方式
+        $request = new Request();
+        if ($request->isPost){
+            //>>接收数据
+            $id = $request->post("id");
+            //>>删除数据(回收站)
+            $model = Goods::findOne(["id"=>$id]);
+            if ($model){
+                //>>商品存在
+                $model->status = 0;
+                $model->save();
+                return 1;
+            }else{
+                echo "商品不存在";
+            }
+        }
     }
-    //>>图片上传
+    //>>Logo图片上传
     public function actionUploads(){
         //echo 111;exit();
         //>>判断请求方式
@@ -126,5 +168,60 @@ class GoodsController extends Controller
                 ],
             ]
         ];
+    }
+    //>>预览商品信息
+    public function actionPreview($id){
+        //>>建立模型对象
+        $goodsModel = Goods::findOne(["id"=>$id]);
+        $goodsIntroModel = GoodsIntro::findOne(["goods_id"=>$id]);
+        //>>显示视图
+        return $this->render("preview",[
+            "goodsModel"=>$goodsModel,
+            "goodsIntroModel"=>$goodsIntroModel
+        ]);
+    }
+    //>>相册列表
+    public function actionImagesList($id){
+        //>>建立模型对象
+        $goodsGalleryList = GoodsGallery::findAll(["goods_id"=>$id]);
+        //var_dump($goodsGalleryList);exit();
+        //>>显示视图页面
+        return $this->render("photoAlbum",[
+            "goodsGalleryList"=>$goodsGalleryList,
+            "id"=>$id
+        ]);
+    }
+    //>>添加相册照片
+    public function actionAddImages($id){
+        //>>判断请求方式
+        $request = new Request();
+        if ($request->isPost){
+            $uploadFile = UploadedFile::getInstanceByName("file");
+            if ($uploadFile){
+                $filename = "/goods_preview/".$id."_".uniqid().".".$uploadFile->extension;
+                //var_dump($filename);exit();
+                $uploadFile->saveAs(\Yii::getAlias("@webroot").$filename,0);
+                //>>创建相册模型对象,保存数据
+                $model = new GoodsGallery();
+                $model->goods_id = $id;
+                $model->path = $filename;
+                $model->save();
+                //>>响应数据给浏览器
+                echo json_encode(["success"=>true,"src"=>$filename]);
+            }
+        }
+    }
+    //>>删除相册的照片
+    public function actionDeleImages(){
+        //>>判断请求方式
+        $request = new Request();
+        if ($request->isPost){
+            //>>获取数据
+            $src = $request->post("src");
+            //>>删除数据
+            GoodsGallery::findOne(["path"=>$src])->delete();
+            //>>响应浏览器
+            echo 1;
+        }
     }
 }

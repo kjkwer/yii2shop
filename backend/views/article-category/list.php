@@ -38,7 +38,7 @@ header('content-type:text/html;charset=utf-8');
                 <a href="/article-category/add" class="btn btn-info btn-lg">添加</a>
             </div>
             <div class="col-lg-2">
-                <a href="/article-category/recycle" class="btn btn-success btn-sm">回收站</a>
+                <a href="/article-category/recycle" class="btn btn-info btn-lg">回收站</a>
             </div>
             <div class="col-lg-6"></div>
             <div class="col-lg-2">

@@ -47,6 +47,7 @@ AppAsset::register($this);
         ]],
         ['label' => '商品管理', 'items' => [
             ['label' => "分类列表", 'url' => ['/goods-category/list']],
+            ['label' => "商品列表", 'url' => ['/goods/list']],
         ]],
     ];
     if (Yii::$app->user->isGuest) {

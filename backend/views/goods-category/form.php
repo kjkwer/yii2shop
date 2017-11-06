@@ -19,7 +19,7 @@ $this->registerCssFile("@web/zTree/css/zTreeStyle/zTreeStyle.css");
 $this->registerJsFile("@web/zTree/js/jquery.ztree.core.js",[
     "depends" => \yii\web\JqueryAsset::className()
 ]);
-$arr = \yii\helpers\Json::encode(array_merge([["id"=>0,"parent"=>0,"name"=>"根目录"]],\backend\models\GoodsCategory::getAll()));
+$arr = \yii\helpers\Json::encode(array_merge([["id"=>0,"parent_id"=>0,"name"=>"根目录"]],\backend\models\GoodsCategory::getAll()));
 $this->registerJs(
     <<<JS
         var zTreeObj;

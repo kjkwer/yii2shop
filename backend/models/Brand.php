@@ -1,5 +1,7 @@
 <?php
 namespace backend\models;
+use yii\helpers\ArrayHelper;
+
 /**
  * Created by PhpStorm.
  * User: Administrator
@@ -21,5 +23,9 @@ class Brand extends \yii\db\ActiveRecord
         return [
             [['name','intro','status','logo'],'required']
         ];
+    }
+    //>>取出所有数据将,其形式转换为["id"=>"name","id"=>"name"...]的形式
+    public static function getOneArray(){
+        return ArrayHelper::map(self::find()->andWhere(["!=","status","-1"])->asArray()->all(),"id","name");
     }
 }

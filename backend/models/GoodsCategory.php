@@ -54,8 +54,9 @@ class GoodsCategory extends ActiveRecord
     }
     //>>================================================
 
-    //>>查询出所有数据
+    //>>查询出所有数据  只查询字段id  parent_id  name
     public static function getAll(){
         return GoodsCategory::find()->select(["id","parent_id","name"])->asArray()->all();
     }
+
 }

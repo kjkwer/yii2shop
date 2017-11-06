@@ -224,4 +224,20 @@ class GoodsController extends Controller
             echo 1;
         }
     }
+    //>>回收站
+    public function actionRecycle(){
+        //>>创建模型对象
+        $goodsModel = new Goods();
+        //>>创建分页工具
+        $pager = new Pagination();
+        $pager->pageSize=4;
+        $pager->totalCount=$goodsModel->find()->count();
+        $goodsList = $goodsModel->find()->andwhere(["=","status","0"])->limit($pager->limit)->offset($pager->offset)->all();
+        //var_dump($brandList);exit();
+        //>>显示页面
+        return $this->render("recycle",[
+            "goodsList"=>$goodsList,
+            "pager"=>$pager
+        ]);
+    }
 }

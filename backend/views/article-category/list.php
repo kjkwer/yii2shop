@@ -3,6 +3,9 @@ header('content-type:text/html;charset=utf-8');
 ?>
     <div class="container">
         <div class="row">
+            <h1>文章目录列表</h1>
+        </div>
+        <div class="row">
             <div>
                 <table class="table table-striped table-condensed">
                     <thead>
@@ -37,10 +40,7 @@ header('content-type:text/html;charset=utf-8');
             <div class="col-lg-2">
                 <a href="/article-category/add" class="btn btn-info btn-lg">添加</a>
             </div>
-            <div class="col-lg-2">
-                <a href="/article-category/recycle" class="btn btn-info btn-lg">回收站</a>
-            </div>
-            <div class="col-lg-6"></div>
+            <div class="col-lg-8"></div>
             <div class="col-lg-2">
                 <?php echo \yii\widgets\LinkPager::widget([
                     "pagination"=>$pager,

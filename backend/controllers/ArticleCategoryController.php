@@ -94,20 +94,4 @@ class ArticleCategoryController extends Controller
             };
         }
     }
-    //>>回收站
-    public function actionRecycle(){
-        //>>创建模型对象
-        $model = new ArticleCategory();
-        //>>创建分页工具
-        $pager = new Pagination();
-        $pager->pageSize=4;
-        $pager->totalCount=$model->find()->count();
-        $articeCategoryList = $model->find()->andwhere(["=","status","-1"])->limit($pager->limit)->offset($pager->offset)->all();
-        //var_dump($brandList);exit();
-        //>>显示页面
-        return $this->render("recycle",[
-            "articeCategoryList"=>$articeCategoryList,
-            "pager"=>$pager
-        ]);
-    }
 }

@@ -9,7 +9,6 @@
 namespace backend\controllers;
 
 
-use backend\models\Goods;
 use backend\models\GoodsCategory;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -104,22 +103,17 @@ class GoodsCategoryController extends Controller
             $model = GoodsCategory::findOne(["id"=>$id]);
             //>>查询该目录下是否存在子目录
             if (!$model->isLeaf()){
-                //>>存在商品或者子目录不能被伤处
-                echo "存在商品或者子目录不能被删除";
+                //>>存在子目录
+                echo "存在子目录不能被删除";
             }else{
-                //>>不存在子目录,查看该目录下是否有商品
-                if (Goods::find()->andWhere(["=","status","1"])->andWhere(["=","goods_category_id",$id])->all()){
-                    //>>存在商品或者子目录不能被删除
-                    echo "存在商品或者子目录不能被删除";
+                //>>不存在子目录
+                if ($model->parent_id==0){
+                    //>>deleteWithChildren()为嵌套集合自带的方法
+                    $model->deleteWithChildren();
                 }else{
-                    if ($model->parent_id==0){
-                        //>>deleteWithChildren()为嵌套集合自带的方法
-                        $model->deleteWithChildren();
-                    }else{
-                        $model->delete();
-                    }
-                    echo 1;
+                    $model->delete();
                 }
+                echo 1;
             }
         }
     }

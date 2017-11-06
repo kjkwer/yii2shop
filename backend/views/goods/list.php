@@ -3,6 +3,24 @@ header('content-type:text/html;charset=utf-8');
 ?>
 <div class="container">
     <div class="row">
+        <h1>商品列表</h1>
+    </div>
+    <div class="row">
+        <?php
+        $form = \yii\bootstrap\ActiveForm::begin([
+            'options' => ['class' => 'form-inline'],
+        ]);
+        $form->method = "get";
+        //$form->fieldConfig = ;
+        echo $form->field($goodsSearchForm,"name")->textInput(["placeholder"=>"商品名称","values"=>23])->label(false);
+        echo $form->field($goodsSearchForm,"sn")->textInput(["placeholder"=>"SN号"])->label(false);
+        echo $form->field($goodsSearchForm,"minPrice")->textInput(["placeholder"=>"$$$"])->label(false);
+        echo $form->field($goodsSearchForm,"maxPrice")->textInput(["placeholder"=>"$$$"])->label(false);
+        echo \yii\bootstrap\Html::submitButton("<span class='glyphicon glyphicon-search'>搜索</span>",["class"=>"btn btn-info"]);
+        \yii\bootstrap\ActiveForm::end();
+        ?>
+    </div>
+    <div class="row">
         <div>
             <table class="table table-striped table-condensed">
                 <thead>
@@ -47,10 +65,7 @@ header('content-type:text/html;charset=utf-8');
         <div class="col-lg-2">
             <a href="/goods/add" class="btn btn-info btn-lg">添加</a>
         </div>
-        <div class="col-lg-2">
-            <a href="/goods/recycle" class="btn btn-info btn-lg">回收站</a>
-        </div>
-        <div class="col-lg-6"></div>
+        <div class="col-lg-8"></div>
         <div class="col-lg-2">
             <?php echo \yii\widgets\LinkPager::widget([
                 "pagination"=>$pager,

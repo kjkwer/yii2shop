@@ -1,5 +1,10 @@
 <?php
 header('content-type:text/html;charset=utf-8');
+?>
+<div>
+    <h1>编辑分类</h1>
+</div>
+<?php
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($model,"name")->textInput();
 echo $form->field($model,"parent_id")->hiddenInput();

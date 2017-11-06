@@ -3,6 +3,9 @@ header('content-type:text/html;charset=utf-8');
 ?>
 <div class="container">
     <div class="row">
+        <h1>分类列表</h1>
+    </div>
+    <div class="row">
         <div>
             <table class="table table-striped table-condensed">
                 <thead>

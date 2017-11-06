@@ -13,6 +13,7 @@ use backend\models\Goods;
 use backend\models\GoodsDayCount;
 use backend\models\GoodsGallery;
 use backend\models\GoodsIntro;
+use backend\models\GoodsSearchForm;
 use kucha\ueditor\UEditorAction;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -26,16 +27,57 @@ class GoodsController extends Controller
     public function actionList(){
         //>>创建模型对象
         $goodsModel = new Goods();
+        $goodsSearchForm = new GoodsSearchForm();
+        $request = new Request();
         //>>创建分页工具
         $pager = new Pagination();
         $pager->totalCount = $goodsModel->find()->count();
         $pager->pageSize = 4;
-        //>>获取每页的数据
-        $goodsList = $goodsModel->find()->andWhere(["=","status","1"])->orderBy("sn desc")->limit($pager->limit)->offset($pager->offset)->all();
+        //>>获取接收到的数据
+        $data = $request->get("GoodsSearchForm");
+        //>>设置模糊查询的信息
+        if ($data["name"]){
+            $name = ['like','name',$data["name"]];
+        }else{
+            $name =[];
+        }
+        if ($data["sn"]){
+            $sn = ['like','sn',$data["sn"]];
+        }else{
+            $sn =[];
+        }
+        if ($data["minPrice"]){
+            $minPrice = ['>=','shop_price',$data["minPrice"]];
+        }else{
+            $minPrice =[];
+        }
+        if ($data["maxPrice"]){
+            $maxPrice = ['<=','shop_price',$data["maxPrice"]];
+        }else{
+            $maxPrice =[];
+        }
+        if ($name==[] && $sn==[] && $minPrice==[] && $maxPrice==[]){
+            $operands = "or";
+        }else{
+            $operands = "and";
+        }
+        //查询当前页的数据
+        $goodsList = $goodsModel->find()->where(["=","status","1"])->andWhere([
+            $operands,
+            $name,
+            $sn,
+            $minPrice,
+            $maxPrice,
+        ])->orderBy("sn desc")->limit($pager->limit)->offset($pager->offset)->all();
         //>>显示视图
+        $goodsSearchForm->name = $data["name"];
+        $goodsSearchForm->sn = $data["sn"];
+        $goodsSearchForm->minPrice = $data["minPrice"];
+        $goodsSearchForm->maxPrice = $data["maxPrice"];
         return $this->render("list",[
             "goodsList"=>$goodsList,
-            "pager"=>$pager
+            "pager"=>$pager,
+            "goodsSearchForm"=>$goodsSearchForm,
         ]);
     }
     //>>添加商品
@@ -223,21 +265,5 @@ class GoodsController extends Controller
             //>>响应浏览器
             echo 1;
         }
-    }
-    //>>回收站
-    public function actionRecycle(){
-        //>>创建模型对象
-        $goodsModel = new Goods();
-        //>>创建分页工具
-        $pager = new Pagination();
-        $pager->pageSize=4;
-        $pager->totalCount=$goodsModel->find()->count();
-        $goodsList = $goodsModel->find()->andwhere(["=","status","0"])->limit($pager->limit)->offset($pager->offset)->all();
-        //var_dump($brandList);exit();
-        //>>显示页面
-        return $this->render("recycle",[
-            "goodsList"=>$goodsList,
-            "pager"=>$pager
-        ]);
     }
 }

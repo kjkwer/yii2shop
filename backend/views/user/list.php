@@ -3,6 +3,9 @@ header('content-type:text/html;charset=utf-8');
 ?>
 <div class="container">
     <div class="row">
+        <h1>会员列表</h1>
+    </div>
+    <div class="row">
         <table>
             <table class="table table-striped table-condensed">
                 <thead>

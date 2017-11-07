@@ -56,14 +56,9 @@ class GoodsController extends Controller
         } else {
             $maxPrice = [];
         }
-        if ($name == [] && $sn == [] && $minPrice == [] && $maxPrice == []) {
-            $operands = "or";
-        } else {
-            $operands = "and";
-        }
         //查询当前页的数据
         $goodsList = $goodsModel->find()->where(["=","status","1"])->andWhere([
-            $operands,
+            "and",
             $name,
             $sn,
             $minPrice,

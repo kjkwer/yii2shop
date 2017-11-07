@@ -11,7 +11,6 @@ header('content-type:text/html;charset=utf-8');
             'options' => ['class' => 'form-inline'],
         ]);
         $form->method = "get";
-        //$form->fieldConfig = ;
         echo $form->field($goodsSearchForm,"name")->textInput(["placeholder"=>"商品名称","values"=>23])->label(false);
         echo $form->field($goodsSearchForm,"sn")->textInput(["placeholder"=>"SN号"])->label(false);
         echo $form->field($goodsSearchForm,"minPrice")->textInput(["placeholder"=>"$$$"])->label(false);

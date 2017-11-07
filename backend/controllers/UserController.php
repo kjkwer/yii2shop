@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\models\LoginForm;
 use backend\models\User;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -93,5 +94,30 @@ class UserController extends Controller
         }else{
             echo "该数据不存在";
         }
+    }
+    //>>登录功能
+    public function actionLogin(){
+        //>>创建模型对象
+        $loginModel = new LoginForm();
+        //>>接受表单数据
+        $request = new Request();
+        if ($request->isPost){
+            $loginModel->load($request->post());
+            //>>调用模型对象判断验证用户
+            if ($loginModel->checkLogin()){
+                //>>验证通过,跳转页面
+                \Yii::$app->session->setFlash("success","登录成功");
+                return $this->redirect("list");
+            }
+        }
+        //>>显示页面
+        return $this->render('login',[
+            "loginModel"=>$loginModel
+        ]);
+    }
+    //>>注销登陆
+    public function actionLogout(){
+        \Yii::$app->user->logout();
+        return $this->redirect("login");
     }
 }

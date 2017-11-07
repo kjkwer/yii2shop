@@ -37,6 +37,9 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => '会员管理', 'items' => [
+            ['label' => "会员列表", 'url' => ['/user/list']],
+        ]],
         ['label' => '文章管理', 'items' => [
                 ['label' => "目录列表", 'url' => ['/article-category/list']],
                 ['label' => "文章列表", 'url' => ['/article/list']],
@@ -51,12 +54,12 @@ AppAsset::register($this);
         ]],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Login', 'url' => ['/user/login']];
     } else {
         $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
+            . Html::beginForm(['/user/logout'], 'post')
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                '管理员 (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()

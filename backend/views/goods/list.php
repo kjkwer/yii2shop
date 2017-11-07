@@ -28,8 +28,6 @@ header('content-type:text/html;charset=utf-8');
                     <th>#</th>
                     <th>货号</th>
                     <th>名称</th>
-                    <th>所属分类</th>
-                    <th>品牌</th>
                     <th>价格</th>
                     <th>库存</th>
                     <th>上线状态</th>
@@ -43,8 +41,6 @@ header('content-type:text/html;charset=utf-8');
                         <td><?=$goods->id?></td>
                         <td><?=$goods->sn?></td>
                         <td><?=$goods->name?></td>
-                        <td><?=$goods->category->name?></td>
-                        <td><?=$goods->brand->name?></td>
                         <td><?=$goods->shop_price?></td>
                         <td><?=$goods->stock?></td>
                         <td><?=$goods->is_on_sale==1?"在售":"下架"?></td>

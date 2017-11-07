@@ -36,29 +36,29 @@ class GoodsController extends Controller
         //>>获取接收到的数据
         $data = $request->get("GoodsSearchForm");
         //>>设置模糊查询的信息
-        if ($data["name"]){
-            $name = ['like','name',$data["name"]];
-        }else{
-            $name =[];
+        if ($data["name"]) {
+            $name = ['like', 'name', $data["name"]];
+        } else {
+            $name = [];
         }
-        if ($data["sn"]){
-            $sn = ['like','sn',$data["sn"]];
-        }else{
-            $sn =[];
+        if ($data["sn"]) {
+            $sn = ['like', 'sn', $data["sn"]];
+        } else {
+            $sn = [];
         }
-        if ($data["minPrice"]){
-            $minPrice = ['>=','shop_price',$data["minPrice"]];
-        }else{
-            $minPrice =[];
+        if ($data["minPrice"]) {
+            $minPrice = ['>=', 'shop_price', $data["minPrice"]];
+        } else {
+            $minPrice = [];
         }
-        if ($data["maxPrice"]){
-            $maxPrice = ['<=','shop_price',$data["maxPrice"]];
-        }else{
-            $maxPrice =[];
+        if ($data["maxPrice"]) {
+            $maxPrice = ['<=', 'shop_price', $data["maxPrice"]];
+        } else {
+            $maxPrice = [];
         }
-        if ($name==[] && $sn==[] && $minPrice==[] && $maxPrice==[]){
+        if ($name == [] && $sn == [] && $minPrice == [] && $maxPrice == []) {
             $operands = "or";
-        }else{
+        } else {
             $operands = "and";
         }
         //查询当前页的数据

@@ -26,53 +26,47 @@ class GoodsController extends Controller
     //>>商品列表
     public function actionList(){
         //>>创建模型对象
-        $goodsModel = new Goods();
+        $goodsModel = Goods::find();
         $goodsSearchForm = new GoodsSearchForm();
         $request = new Request();
+        //>>设置搜索查询的信息
+        //$data = $request->get("GoodsSearchForm");
+        $name = $request->get("name");
+        $sn = $request->get("sn");
+        $minPrice = $request->get("minPrice");
+        $maxPrice = $request->get("maxPrice");
+        //var_dump($request->get());exit();
+        if ($name){
+            $goodsModel->andWhere(["like","name",$name]);
+        }
+        if ($sn){
+            $goodsModel->andWhere(["like","sn",$sn]);
+        }
+        if ($minPrice){
+            $goodsModel->andWhere([">=","shop_price",$minPrice]);
+        }
+        if ($maxPrice){
+            $goodsModel->andWhere(["<=","shop_price",$maxPrice]);
+        }
         //>>创建分页工具
         $pager = new Pagination();
-        $pager->totalCount = $goodsModel->find()->count();
+        $pager->totalCount = $goodsModel->count();
         $pager->pageSize = 4;
-        //>>获取接收到的数据
-        $data = $request->get("GoodsSearchForm");
-        //>>设置模糊查询的信息
-        if ($data["name"]) {
-            $name = ['like', 'name', $data["name"]];
-        } else {
-            $name = [];
-        }
-        if ($data["sn"]) {
-            $sn = ['like', 'sn', $data["sn"]];
-        } else {
-            $sn = [];
-        }
-        if ($data["minPrice"]) {
-            $minPrice = ['>=', 'shop_price', $data["minPrice"]];
-        } else {
-            $minPrice = [];
-        }
-        if ($data["maxPrice"]) {
-            $maxPrice = ['<=', 'shop_price', $data["maxPrice"]];
-        } else {
-            $maxPrice = [];
-        }
         //查询当前页的数据
-        $goodsList = $goodsModel->find()->where(["=","status","1"])->andWhere([
-            "and",
-            $name,
-            $sn,
-            $minPrice,
-            $maxPrice,
-        ])->orderBy("sn desc")->limit($pager->limit)->offset($pager->offset)->all();
+        $goodsList = $goodsModel->orderBy("sn desc")->limit($pager->limit)->offset($pager->offset)->all();
         //>>显示视图
-        $goodsSearchForm->name = $data["name"];
-        $goodsSearchForm->sn = $data["sn"];
-        $goodsSearchForm->minPrice = $data["minPrice"];
-        $goodsSearchForm->maxPrice = $data["maxPrice"];
+        $goodsSearchForm->name=$name;
+        $goodsSearchForm->sn=$sn;
+        $goodsSearchForm->minPrice=$minPrice;
+        $goodsSearchForm->maxPrice=$maxPrice;
         return $this->render("list",[
             "goodsList"=>$goodsList,
             "pager"=>$pager,
             "goodsSearchForm"=>$goodsSearchForm,
+            "name"=>$name,
+            "sn"=>$sn,
+            "minPrice"=>$minPrice,
+            "maxPrice"=>$maxPrice,
         ]);
     }
     //>>添加商品
@@ -91,7 +85,6 @@ class GoodsController extends Controller
             $goodsDayCount->save();
             $num = 1;
         }
-        $goodsModel->sn = date("Ymd").sprintf("%05d",$num);
         //var_dump($goodsModel->sn);exit();
         //>>设置默认的添加路径
         $goodsModel->goods_category_id = 0;
@@ -106,6 +99,7 @@ class GoodsController extends Controller
             if ($goodsModel->validate() && $goodsIntroModel->validate()){
                 //>>验证通过,保存数据
                 $goodsModel->status = 1;
+                $goodsModel->sn = date("Ymd").sprintf("%05d",$num);
                 $goodsModel->create_time = time();
                 $goodsModel->save();
                 $goodsIntroModel->goods_id = $goodsModel->id;
@@ -126,7 +120,7 @@ class GoodsController extends Controller
         //>>显示视图
         return $this->render("form",[
             "goodsModel"=>$goodsModel,
-            "goodsIntroModel"=>$goodsIntroModel
+            "goodsIntroModel"=>$goodsIntroModel,
         ]);
     }
     //>>更新商品

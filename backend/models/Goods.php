@@ -16,7 +16,6 @@ class Goods extends ActiveRecord
     public function attributeLabels(){
         return [
             "name"=>"商品名称",
-            "sn"=>"货号",
             "logo"=>"选择Logo",
             "goods_category_id"=>"所属分类",
             "brand_id"=>"所属品牌",
@@ -29,7 +28,7 @@ class Goods extends ActiveRecord
     }
     public function rules(){
         return [
-            [["name","sn","logo","goods_category_id","brand_id","market_price","shop_price","stock","is_on_sale"],"required"],
+            [["name","logo","goods_category_id","brand_id","market_price","shop_price","stock","is_on_sale"],"required"],
             [["goods_category_id"],"compare","compareValue"=>0,"operator"=>">","message"=>"所属分类不能为空"],
             [["market_price","shop_price"],"double"],
             [["stock","sort"],"integer"],

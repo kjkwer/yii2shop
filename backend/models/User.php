@@ -32,7 +32,7 @@ class User extends ActiveRecord implements IdentityInterface
     //>>附加行为
     public function behaviors(){
         return [
-            "timestamp"=>[
+            "timestamp"=>[   //自动更新 添加时间 和 修改时间
                 //"class"=>TimestampBehavior::className(),
                 "class"=>TimestampBehavior::className(),
                 "attributes"=>[
@@ -95,6 +95,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function getAuthKey()
     {
         // TODO: Implement getAuthKey() method.
+        return $this->auth_key;
     }
 
     /**
@@ -108,5 +109,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         // TODO: Implement validateAuthKey() method.
+        return $this->auth_key === $authKey;
     }
 }

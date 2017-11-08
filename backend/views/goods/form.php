@@ -7,7 +7,6 @@ header('content-type:text/html;charset=utf-8');
 <?php
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($goodsModel,"name")->textInput();
-echo $form->field($goodsModel,"sn")->textInput(['readonly'=>'true']);
 echo $form->field($goodsModel,"logo")->hiddenInput();
 ?>
     <!--图片上传-->

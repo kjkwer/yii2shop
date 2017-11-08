@@ -6,18 +6,13 @@ header('content-type:text/html;charset=utf-8');
         <h1>商品列表</h1>
     </div>
     <div class="row">
-        <?php
-        $form = \yii\bootstrap\ActiveForm::begin([
-            'options' => ['class' => 'form-inline'],
-        ]);
-        $form->method = "get";
-        echo $form->field($goodsSearchForm,"name")->textInput(["placeholder"=>"商品名称","values"=>23])->label(false);
-        echo $form->field($goodsSearchForm,"sn")->textInput(["placeholder"=>"SN号"])->label(false);
-        echo $form->field($goodsSearchForm,"minPrice")->textInput(["placeholder"=>"$$$"])->label(false);
-        echo $form->field($goodsSearchForm,"maxPrice")->textInput(["placeholder"=>"$$$"])->label(false);
-        echo \yii\bootstrap\Html::submitButton("<span class='glyphicon glyphicon-search'>搜索</span>",["class"=>"btn btn-info"]);
-        \yii\bootstrap\ActiveForm::end();
-        ?>
+        <form action="/goods/list" method="get">
+            <input type="text" name="name" value="<?=$name?>" placeholder="商品名称">
+            <input type="text" name="sn" value="<?=$sn?>" placeholder="商品SN号">
+            <input type="text" name="minPrice" value="<?=$minPrice?>" placeholder="最低价格">
+            <input type="text"  name="maxPrice" value="<?=$maxPrice?>" placeholder="最高价格">
+            <input type="submit" value="提交">
+        </form>
     </div>
     <div class="row">
         <div>

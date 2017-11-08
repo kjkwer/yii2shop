@@ -12,6 +12,7 @@ namespace backend\controllers;
 use backend\models\LoginForm;
 use backend\models\User;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Request;
 
@@ -119,5 +120,25 @@ class UserController extends Controller
     public function actionLogout(){
         \Yii::$app->user->logout();
         return $this->redirect("login");
+    }
+    //>>自动登录
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+    public function actionTest(){
+        var_dump(\Yii::$app->request->cookies);
     }
 }

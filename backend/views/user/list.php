@@ -14,7 +14,7 @@ header('content-type:text/html;charset=utf-8');
                     <td>用户名</td>
                     <td>邮箱</td>
                     <td>状态</td>
-                    <td>更新时间</td>
+                    <td>登录时间</td>
                     <td>操作</td>
                 </tr>
                 </thead>

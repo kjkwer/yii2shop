@@ -19,12 +19,13 @@ class LoginForm extends Model
     public function attributeLabels(){
         return [
             "username"=>"用户名",
-            "password_hash"=>"密码"
+            "password_hash"=>"密码",
         ];
     }
     public function rules(){
         return [
-            [["username","password_hash"],"required"]
+            [["username","password_hash"],"required"],
+            [["rem"],"safe"]
         ];
     }
     //>>验证登录
@@ -38,7 +39,12 @@ class LoginForm extends Model
                 $user->last_login_ip = ip2long(\Yii::$app->request->userIP);
                 $user->save();
                 //>>密码正确,将用户信息保存在session和cookie中
-                \Yii::$app->user->login($user,3600);
+                if (is_array($this->rem)){
+                    $duration = 3600;
+                }else{
+                    $duration = 0;
+                }
+                \Yii::$app->user->login($user,$duration);
                 //\Yii::$app->user->switchIdentity($user,3600);
                 //>>跳转页面
                 return true;

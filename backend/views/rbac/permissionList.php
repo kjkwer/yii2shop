@@ -6,7 +6,7 @@ header('content-type:text/html;charset=utf-8');
         <h1>权限列表</h1>
     </div>
     <div class="row">
-        <table class="table table-striped table-condensed">
+        <table id="table_id_example" class="display">
             <thead>
             <tr>
                 <th>路由</th>
@@ -41,6 +41,10 @@ header('content-type:text/html;charset=utf-8');
 /**
  * @var $this \yii\web\View
  */
+$this->registerCssFile("@web/dataTables/media/css/jquery.dataTables.css");
+$this->registerJsFile("@web/dataTables/media/js/jquery.dataTables.js",[
+        "depends"=>\yii\web\YiiAsset::className()
+]);
 $url = \yii\helpers\Url::to(["/rbac/permission-delete"]);
 $this->registerJs(<<<JS
 $(".del").click(function() {
@@ -57,5 +61,6 @@ $(".del").click(function() {
         })
     }
 })
+$('#table_id_example').DataTable();
 JS
 );

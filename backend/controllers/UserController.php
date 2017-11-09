@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\filters\RbacFilters;
 use backend\models\LoginForm;
 use backend\models\RePwdForm;
 use backend\models\RoleForm;
@@ -208,5 +209,14 @@ class UserController extends Controller
             ]
         ];
 
+    }
+    //>>附加行为
+    public function behaviors(){
+        return [
+            "rbac"=>[   //权限控制
+                "class"=>RbacFilters::className(),
+                "except"=>["login","logout","captcha"]
+            ]
+        ];
     }
 }

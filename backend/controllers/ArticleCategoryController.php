@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\filters\RbacFilters;
 use backend\models\ArticleCategory;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -93,5 +94,13 @@ class ArticleCategoryController extends Controller
                 echo "数据不存在";
             };
         }
+    }
+    //>>附加行为
+    public function behaviors(){
+        return [
+            "rbac"=>[   //权限控制
+                "class"=>RbacFilters::className()
+            ]
+        ];
     }
 }

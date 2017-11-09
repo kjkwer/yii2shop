@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\filters\RbacFilters;
 use backend\models\Goods;
 use backend\models\GoodsDayCount;
 use backend\models\GoodsGallery;
@@ -254,5 +255,13 @@ class GoodsController extends Controller
             //>>响应浏览器
             echo 1;
         }
+    }
+    //>>附加行为
+    public function behaviors(){
+        return [
+            "rbac"=>[   //权限控制
+                "class"=>RbacFilters::className()
+            ]
+        ];
     }
 }

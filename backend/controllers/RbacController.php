@@ -8,10 +8,12 @@
 
 namespace backend\controllers;
 
+use backend\filters\RbacFilters;
 use backend\models\PermissionForm;
 use backend\models\RoleForm;
 use Codeception\Lib\Connector\Yii1;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Request;
@@ -227,5 +229,13 @@ class RbacController extends Controller
             "roleForm"=>$roleForm,
             "permissions"=>$permissions
         ]);
+    }
+    //>>附加行为
+    public function behaviors(){
+        return [
+            "rbac"=>[   //权限控制
+                "class"=>RbacFilters::className()
+            ]
+        ];
     }
 }

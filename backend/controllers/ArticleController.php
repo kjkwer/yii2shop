@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\filters\RbacFilters;
 use backend\models\Article;
 use backend\models\ArticleDetail;
 use kucha\ueditor\UEditorAction;
@@ -119,6 +120,14 @@ class ArticleController extends Controller
                     "imagePathFormat" => "/article_intro_images/{yyyy}{mm}{dd}/{time}{rand:6}", //上传保存路径
                     "imageRoot" => \Yii::getAlias("@webroot")
                 ],
+            ]
+        ];
+    }
+    //>>附加行为
+    public function behaviors(){
+        return [
+            "rbac"=>[   //权限控制
+                "class"=>RbacFilters::className()
             ]
         ];
     }

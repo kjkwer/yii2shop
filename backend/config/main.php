@@ -10,7 +10,7 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'defaultRoute'=>'text/list',//设置默认路由
+    'defaultRoute'=>'goods/list',//设置默认路由
     'language'=>'zh-CN',  //设置语言
     'timeZone' => 'Asia/Shanghai',  //设置时区
     'bootstrap' => ['log'],
@@ -24,6 +24,7 @@ return [
             'identityClass' => \backend\models\User::className(),//指定一个含有实际认证逻辑的认证类
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'loginUrl'=>["user/login"]
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend

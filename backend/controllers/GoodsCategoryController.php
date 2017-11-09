@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\filters\RbacFilters;
 use backend\models\GoodsCategory;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -116,5 +117,13 @@ class GoodsCategoryController extends Controller
                 echo 1;
             }
         }
+    }
+    //>>附加行为
+    public function behaviors(){
+        return [
+            "rbac"=>[   //权限控制
+                "class"=>RbacFilters::className()
+            ]
+        ];
     }
 }

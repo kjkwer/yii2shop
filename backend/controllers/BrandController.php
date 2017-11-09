@@ -7,6 +7,7 @@
  */
 
 namespace backend\controllers;
+use backend\filters\RbacFilters;
 use backend\models\Brand;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -133,5 +134,13 @@ class BrandController extends Controller
                 }
             }
         }
+    }
+    //>>附加行为
+    public function behaviors(){
+        return [
+            "rbac"=>[   //权限控制
+                "class"=>RbacFilters::className()
+            ]
+        ];
     }
 }

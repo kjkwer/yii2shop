@@ -23,7 +23,7 @@ class PermissionForm extends Model
     }
     public function rules(){
         return [
-            [["route","desc"],"required"]
+            [["route","desc"],"required"],
         ];
     }
 }

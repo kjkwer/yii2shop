@@ -14,19 +14,22 @@ use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
+    public $roles;//在添加和修改用户时,给用户分配角色是使用
     public function attributeLabels(){
         return [
             "username"=>"用户名",
             "password_hash"=>"密码",
             "email"=>"邮箱",
-            "status"=>"是否启用"
+            "status"=>"是否启用",
+            'roles'=>'角色'
         ];
     }
     public function rules(){
         return [
             [["username","password_hash","email","status"],"required"],
             [["email"],"email"],
-            [["username"],"unique"]
+            [["username"],"unique"],
+            [["roles"],"safe"]
         ];
     }
     //>>保存附加行为

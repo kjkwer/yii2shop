@@ -21,7 +21,7 @@ header('content-type:text/html;charset=utf-8');
                     <td><?=$permission->description?></td>
                     <td>
                         <?=\yii\bootstrap\Html::button("删除",["class"=>"del btn btn-warning btn-xs","route"=>$permission->name])?>
-                        <?=\yii\bootstrap\Html::button("修改",["class"=>"btn btn-success btn-xs"])?>
+                        <?=\yii\bootstrap\Html::a("修改",\yii\helpers\Url::to(["/rbac/permission-update","name"=>$permission->name]),["class"=>"btn btn-success btn-xs"])?>
                     </td>
                 </tr>
             <?php endforeach;?>
@@ -34,12 +34,6 @@ header('content-type:text/html;charset=utf-8');
         </div>
         <div class="col-lg-8"></div>
         <div class="col-lg-2">
-            <?php
-                echo \yii\widgets\LinkPager::widget([
-                    "pagination"=>$pager,
-                    "maxButtonCount"=>5
-                ])
-            ?>
         </div>
     </div>
 </div>
@@ -49,17 +43,19 @@ header('content-type:text/html;charset=utf-8');
  */
 $url = \yii\helpers\Url::to(["/rbac/permission-delete"]);
 $this->registerJs(<<<JS
-    $(".del").click(function() {
-      var route = $(this).attr("route");
-      var that = $(this);
-      $.post("$url",{"route":route},function(data) {
-        if (data==1){
-            alert("删除成功");
-            that.closest("tr").fadeOut();
-        }else {
-            alert(data);
-        }
-      })
-    })
+$(".del").click(function() {
+    if (confirm("删除后数据无法恢复,是否继续")){
+        var route = $(this).attr("route");
+        var that = $(this);
+        $.post("$url",{"route":route},function(data) {
+            if (data==1){
+                alert("删除成功");
+                that.closest("tr").fadeOut();
+            }else {
+                alert(data);
+            }
+        })
+    }
+})
 JS
 );

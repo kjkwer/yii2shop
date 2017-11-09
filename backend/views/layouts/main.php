@@ -43,7 +43,7 @@ AppAsset::register($this);
         ]],
         ['label' => '权限管理', 'items' => [
             ['label' => "权限列表", 'url' => ['/rbac/permission-list']],
-            //['label' => "修改密码", 'url' => ['/user/re-pwd']],
+            ['label' => "角色列表", 'url' => ['/rbac/role-list']],
         ]],
         ['label' => '文章管理', 'items' => [
                 ['label' => "目录列表", 'url' => ['/article-category/list']],

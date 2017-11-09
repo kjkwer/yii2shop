@@ -11,11 +11,13 @@ namespace backend\controllers;
 
 use backend\models\LoginForm;
 use backend\models\RePwdForm;
+use backend\models\RoleForm;
 use backend\models\User;
 use yii\captcha\Captcha;
 use yii\captcha\CaptchaAction;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Request;
 
@@ -41,14 +43,27 @@ class UserController extends Controller
     public function actionAdd(){
         //>>创建模型对象
         $userModel = new User();
+        //>>获取所有的角色
+        $auth = \Yii::$app->authManager;
+        $roleList = $auth->getRoles();
+        //>>并将权限转换成 ["name1"=>"description1","name2"=>"description2"...]的形式
+        $roles = ArrayHelper::map($roleList,"name","description");
         //>>判断请求方式
         $request = new Request();
         if ($request->isPost){
             $userModel->load($request->post());
+            $roleNames = $request->post("User")["roles"];
             if ($userModel->validate()){
                 $userModel->password_hash = \Yii::$app->security->generatePasswordHash($userModel->password_hash);
                 $userModel->auth_key = uniqid();
                 $userModel->save();
+                //>>给用户分配配色
+                if($roleNames){
+                    foreach ($roleNames as $roleName){
+                        $role = $auth->getRole($roleName);
+                        $auth->assign($role,$userModel->id);
+                    }
+                }
                 //>>保存数据成功,跳转页面
                 \Yii::$app->session->setFlash("success","添加成功");
                 return $this->redirect("list");
@@ -59,20 +74,41 @@ class UserController extends Controller
         }
         //>>显示视图
         return $this->render("form",[
-           "userModel"=>$userModel
+           "userModel"=>$userModel,
+            "roles"=>$roles
         ]);
     }
     //>>修改管理员
     public function actionUpd($id){
         //>>创建表单对象
         $userModel = User::findOne(["id"=>$id]);
+        //>>获取所有的角色
+        $auth = \Yii::$app->authManager;
+        $roleList = $auth->getRoles();
+        //>>并将权限转换成 ["name1"=>"description1","name2"=>"description2"...]的形式
+        $roles = ArrayHelper::map($roleList,"name","description");
+        //>>获取该用户所有的角色
+        $userRoles = $auth->getRolesByUser($userModel->id);
+        $userModel->roles = [];
+        foreach ($userRoles as $userRole){
+            $userModel->roles[]=$userRole->name;
+        }
         //>>判断请求方式
         $request = new Request();
         if ($request->isPost){
             $userModel->load($request->post());
+            $roleNames = $request->post("User")["roles"];
             if ($userModel->validate()){
                 $userModel->password_hash = \Yii::$app->security->generatePasswordHash($userModel->password_hash);
                 $userModel->save();
+                //>>给用户设置新的角色
+                $auth->revokeAll($id);
+                if($roleNames){
+                    foreach ($roleNames as $roleName){
+                        $role = $auth->getRole($roleName);
+                        $auth->assign($role,$userModel->id);
+                    }
+                }
                 //>>保存数据成功,跳转页面
                 \Yii::$app->session->setFlash("success","添加成功");
                 return $this->redirect("list");
@@ -83,7 +119,8 @@ class UserController extends Controller
         }
         //>>显示页面
         return $this->render("form",[
-            "userModel"=>$userModel
+            "userModel"=>$userModel,
+            "roles"=>$roles
         ]);
     }
     //>>删除管理员
@@ -94,6 +131,7 @@ class UserController extends Controller
         //>>判断是否存在该参数
         if (User::findOne(["id"=>$id])){
             User::findOne(["id"=>$id])->delete();
+            \Yii::$app->authManager->revokeAll($id);
             echo 1;
         }else{
             echo "该数据不存在";

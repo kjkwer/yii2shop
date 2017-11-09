@@ -10,7 +10,7 @@ echo $form->field($model,"name")->textInput();
 echo $form->field($model,"intro")->textarea();
 echo $form->field($model,"logo")->hiddenInput();
 ?>
-<!--图片上穿-->
+<!--图片上传-->
 <div id="uploader-demo">
     <!--用来存放item-->
     <div id="fileList" class="uploader-list"></div>
@@ -27,7 +27,8 @@ echo \yii\bootstrap\Html::submitButton("提交",["class"=>"btn btn-info"]);
  */
 $this->registerCssFile("@web/webuploader/webuploader.css");
 $this->registerJsFile("@web/webuploader/webuploader.js",[
-    "depends"=>\yii\web\JqueryAsset::className()]);
+    "depends"=>\yii\web\JqueryAsset::className()
+]);
 $url = \yii\helpers\Url::to("upload");
 $this->registerJs(<<<JS
 var uploader = WebUploader.create({

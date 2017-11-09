@@ -10,7 +10,10 @@ namespace backend\controllers;
 
 
 use backend\models\LoginForm;
+use backend\models\RePwdForm;
 use backend\models\User;
+use yii\captcha\Captcha;
+use yii\captcha\CaptchaAction;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -44,6 +47,7 @@ class UserController extends Controller
             $userModel->load($request->post());
             if ($userModel->validate()){
                 $userModel->password_hash = \Yii::$app->security->generatePasswordHash($userModel->password_hash);
+                $userModel->auth_key = uniqid();
                 $userModel->save();
                 //>>保存数据成功,跳转页面
                 \Yii::$app->session->setFlash("success","添加成功");
@@ -62,7 +66,6 @@ class UserController extends Controller
     public function actionUpd($id){
         //>>创建表单对象
         $userModel = User::findOne(["id"=>$id]);
-        $userModel->password_hash = "";
         //>>判断请求方式
         $request = new Request();
         if ($request->isPost){
@@ -121,24 +124,51 @@ class UserController extends Controller
         \Yii::$app->user->logout();
         return $this->redirect("login");
     }
-    //>>自动登录
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-        ];
+    //>>修改密码
+    public function actionRePwd(){
+        //>>判断用户是否登录
+        if(\Yii::$app->user->isGuest){
+            //>>未登录则跳转到登录页
+            \Yii::$app->session->setFlash("success","请先登录");
+            return $this->redirect("login");
+        }
+        //>>创建表单模型对象
+        $rePwdForm = new RePwdForm();
+        //>>接收参数
+        $request = new Request();
+        if ($request->isPost){
+            $rePwdForm->load($request->post());
+            //>>验证数据
+            if ($rePwdForm->validate()){
+                //>>获取当前用户密码
+                $pwd = \Yii::$app->user->identity->password_hash;
+                //>>验证旧密码是否正确
+                if (\Yii::$app->security->validatePassword($rePwdForm->oldPwd,$pwd)){
+                    User::updateAll(["password_hash"=>\Yii::$app->security->generatePasswordHash($rePwdForm->newPwd),"auth_key"=>uniqid()],["id"=>\Yii::$app->user->identity->id]);
+                    \Yii::$app->session->setFlash("success","密码修改成功,请重新登录");
+                    return $this->redirect("login");
+                }else{
+                    $rePwdForm->addError("oldPwd","旧密码错误");
+                }
+            }else{
+                \Yii::$app->session->setFlash("success",$rePwdForm->getErrors());
+            }
+        }
+        //>>显示视图
+        return $this->render("rePwd",[
+            "rePwdForm"=>$rePwdForm
+        ]);
     }
-    public function actionTest(){
-        var_dump(\Yii::$app->request->cookies);
+    //>>绑定行为
+    public function actions(){
+        return [
+            "captcha"=>[   //验证码
+                'class'=>CaptchaAction::className(),
+                'fixedVerifyCode'=>YII_ENV_TEST?'testme':null,
+                'minLength'=>4,
+                'maxLength'=>4
+            ]
+        ];
+
     }
 }

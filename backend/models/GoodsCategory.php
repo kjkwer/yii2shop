@@ -7,7 +7,6 @@
  */
 
 namespace backend\models;
-
 use yii;
 use yii\db\ActiveRecord;
 //>>嵌套集合插件的文件命名空间

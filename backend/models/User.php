@@ -8,7 +8,6 @@
 
 namespace backend\models;
 
-
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -26,6 +25,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules(){
         return [
             [["username","password_hash","email","status"],"required"],
+            [["email"],"email"],
+            [["username"],"unique"]
         ];
     }
     //>>保存附加行为
@@ -42,7 +43,6 @@ class User extends ActiveRecord implements IdentityInterface
             ]
         ];
     }
-
     /**
      * Finds an identity by the given ID.
      * @param string|int $id the ID to be looked for
@@ -55,7 +55,6 @@ class User extends ActiveRecord implements IdentityInterface
         // TODO: Implement findIdentity() method.
         return self::findOne(["id"=>$id]);
     }
-
     /**
      * Finds an identity by the given token.
      * @param mixed $token the token to be looked for
@@ -69,7 +68,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         // TODO: Implement findIdentityByAccessToken() method.
     }
-
     /**
      * Returns an ID that can uniquely identify a user identity.
      * @return string|int an ID that uniquely identifies a user identity.
@@ -79,7 +77,6 @@ class User extends ActiveRecord implements IdentityInterface
         // TODO: Implement getId() method.
         return $this->id;
     }
-
     /**
      * Returns a key that can be used to check the validity of a given identity ID.
      *
@@ -97,7 +94,6 @@ class User extends ActiveRecord implements IdentityInterface
         // TODO: Implement getAuthKey() method.
         return $this->auth_key;
     }
-
     /**
      * Validates the given auth key.
      *

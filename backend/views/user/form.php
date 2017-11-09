@@ -8,7 +8,9 @@ header('content-type:text/html;charset=utf-8');
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($userModel,"username")->textInput();
 echo $form->field($userModel,"email")->textInput();
-echo $form->field($userModel,"password_hash")->passwordInput();
+if ($userModel->isNewRecord){
+    echo $form->field($userModel,"password_hash")->passwordInput();
+}
 //echo $form->field($userModel,"re_password_hash")->passwordInput();
 echo $form->field($userModel,"status",["inline"=>true])->radioList([0=>"否",1=>"是"]);
 echo \yii\bootstrap\Html::submitButton("提交",["class"=>"btn btn-info"]);

@@ -39,6 +39,11 @@ AppAsset::register($this);
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => '会员管理', 'items' => [
             ['label' => "会员列表", 'url' => ['/user/list']],
+            ['label' => "修改密码", 'url' => ['/user/re-pwd']],
+        ]],
+        ['label' => '权限管理', 'items' => [
+            ['label' => "权限列表", 'url' => ['/rbac/permission-list']],
+            //['label' => "修改密码", 'url' => ['/user/re-pwd']],
         ]],
         ['label' => '文章管理', 'items' => [
                 ['label' => "目录列表", 'url' => ['/article-category/list']],

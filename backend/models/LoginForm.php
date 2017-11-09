@@ -16,16 +16,19 @@ class LoginForm extends Model
     public $username;
     public $password_hash;
     public $rem;
+    public $captcha;
     public function attributeLabels(){
         return [
             "username"=>"用户名",
             "password_hash"=>"密码",
+            "captcha"=>"验证码"
         ];
     }
     public function rules(){
         return [
             [["username","password_hash"],"required"],
-            [["rem"],"safe"]
+            [["rem"],"safe"],
+            [["captcha"],"captcha","captchaAction"=>'user/captcha']
         ];
     }
     //>>验证登录

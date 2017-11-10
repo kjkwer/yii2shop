@@ -35,29 +35,7 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => '会员管理', 'items' => [
-            ['label' => "会员列表", 'url' => ['/user/list']],
-            ['label' => "修改密码", 'url' => ['/user/re-pwd']],
-        ]],
-        ['label' => '权限管理', 'items' => [
-            ['label' => "权限列表", 'url' => ['/rbac/permission-list']],
-            ['label' => "角色列表", 'url' => ['/rbac/role-list']],
-        ]],
-        ['label' => '文章管理', 'items' => [
-                ['label' => "目录列表", 'url' => ['/article-category/list']],
-                ['label' => "文章列表", 'url' => ['/article/list']],
-
-        ]],
-        ['label' => '品牌管理', 'items' => [
-            ['label' => "品牌列表", 'url' => ['/brand/list']],
-        ]],
-        ['label' => '商品管理', 'items' => [
-            ['label' => "分类列表", 'url' => ['/goods-category/list']],
-            ['label' => "商品列表", 'url' => ['/goods/list']],
-        ]],
-    ];
+    $menuItems = \backend\models\Menu::menuCategory();
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/user/login']];
     } else {

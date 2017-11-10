@@ -10,6 +10,7 @@ namespace backend\models;
 
 
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
 class PermissionForm extends Model
 {
@@ -71,5 +72,11 @@ class PermissionForm extends Model
             //>>修改成功返回列表页
             return true;
         }
+    }
+    //>>获取所有路由(从权限表中)
+    public static function getAllRoute(){
+        $allPermission = \Yii::$app->authManager->getPermissions();
+        $permission = ArrayHelper::map($allPermission,"name","name");
+        return $permission;
     }
 }

@@ -63,13 +63,7 @@ class RoleForm extends Model
             if ($this->per){
                 foreach ($this->per as $permissionName){
                     $permission = $auth->getPermission($permissionName);
-                    if ($permissionName){
-                        if (!$auth->addChild($role,$permission)){
-                            return false;
-                        }
-                    }else{
-                        return false;
-                    }
+                    $auth->addChild($role,$permission);
                 }
             }
             return true;
@@ -88,13 +82,7 @@ class RoleForm extends Model
             if ($this->per){
                 foreach ($this->per as $permissionName){
                     $permission = $auth->getPermission($permissionName);
-                    if ($permission){
-                        if (!$auth->addChild($role,$permission)){
-                            return false;
-                        }
-                    }else{
-                        return false;
-                    }
+                    $auth->addChild($role,$permission);
                 }
             }
             return true;

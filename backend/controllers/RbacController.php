@@ -11,11 +11,9 @@ namespace backend\controllers;
 use backend\filters\RbacFilters;
 use backend\models\PermissionForm;
 use backend\models\RoleForm;
-use Codeception\Lib\Connector\Yii1;
-use yii\data\Pagination;
-use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use yii\web\HttpException;
 use yii\web\Request;
 
 class RbacController extends Controller
@@ -39,20 +37,11 @@ class RbacController extends Controller
         if ($request->isPost){
             $permissionForm->load($request->post());
             //>>验证数据
-            if ($permissionForm->validate()){
-                //>>判断该权限是否已存在
-                if (!\Yii::$app->authManager->getPermission($permissionForm->route)){
-                    //>>验证通过保存权限
-                    $auth = \Yii::$app->authManager;
-                    $per = $auth->createPermission($permissionForm->route);
-                    $per->description = $permissionForm->desc;
-                    $auth->add($per);
-                    //>>保存成功,跳转页面
-                    \Yii::$app->session->setFlash("success","添加成功");
-                    return $this->redirect("permission-list");
-                }else{
-                    $permissionForm->addError("route","该权限已存在,请勿重复添加");
-                }
+            $permissionForm->scenario = PermissionForm::SCENARIO_ADD; //设置验证场景
+            if ($permissionForm->validate() && $permissionForm->add()){
+                //>>保存信息成功跳转页面
+                \Yii::$app->session->setFlash("success","添加成功");
+                return $this->redirect("permission-list");
             }
         }
         //>>显示视图
@@ -86,22 +75,22 @@ class RbacController extends Controller
         //>>获得当前权限的对象
         $auth = \Yii::$app->authManager;
         $per = $auth->getPermission($name);
+        if (!$per){  //当权限不存在时
+            throw new HttpException(403,"该数据不存在");
+        }
         //>>设置回显参数
         $permissionForm->route = $per->name;
         $permissionForm->desc = $per->description;
+        $permissionForm->oldRoute = $name;
         //>>接收请求数据
         $request = new Request();
-        if ($request->post()){
+        if ($request->post()) {
             $permissionForm->load($request->post());
-            if ($permissionForm->validate()){
-                //var_dump($permissionForm);exit();
-                $per->name = $permissionForm->route;
-                $per->description = $permissionForm->desc;
-                if ($auth->update($name,$per)){
-                    //>>修改成功返回列表页
-                    \Yii::$app->session->setFlash("success","修改成功");
-                    return $this->redirect("permission-list");
-                }
+            $permissionForm->scenario = PermissionForm::SCENARIO_UPD;//设置验证场景
+            if ($permissionForm->validate() && $permissionForm->upd($name)) {
+                //>>修改成功返回列表页
+                \Yii::$app->session->setFlash("success", "修改成功");
+                return $this->redirect("permission-list");
             }
         }
         //>>显示视图
@@ -132,27 +121,11 @@ class RbacController extends Controller
         $request = new Request();
         if ($request->isPost){
             $roleForm->load($request->post());
-            if ($roleForm->validate()){
-                //>>判断该角色是否已存在
-                if (!$auth->getRole($roleForm->name)){
-                    //>>验证数据通过,添加角色
-                    $role = $auth->createRole($roleForm->name);
-                    $role->description = $roleForm->desc;
-                    $auth->add($role);
-                    //>>分配权限
-                    if ($roleForm->per){
-                        foreach ($roleForm->per as $permissionName){
-                            $permission = $auth->getPermission($permissionName);
-                            $auth->addChild($role,$permission);
-                        }
-                    }
+            $roleForm->scenario = RoleForm::SCENARIO_ADD;//设置验证场景
+            if ($roleForm->validate() && $roleForm->add()){
                     //>>保存信息成功跳转页面
                     \Yii::$app->session->setFlash("success","添加成功");
                     return $this->redirect("role-list");
-                }else{
-                    //>>已存在
-                    $roleForm->addError("name","该角色已存在,请勿重复添加");
-                }
             }else{
                 var_dump($roleForm->getErrors());
                 exit();
@@ -190,10 +163,14 @@ class RbacController extends Controller
         //>>获取当前角色的对象,以及当前角色下的所有权限
         $auth = \Yii::$app->authManager;
         $role = $auth->getRole($name);
+        if (!$role){  //当角色不存在时
+            throw new HttpException(403,"该数据不存在");
+        }
         $rolePermissions = $auth->getPermissionsByRole($name);
         //>>设置回显参数
         $roleForm->name = $role->name;
         $roleForm->desc = $role->description;
+        $roleForm->oldName = $name;
         $roleForm->per = [];
         foreach ($rolePermissions as $rolePermission){
             $roleForm->per[] = $rolePermission->name;
@@ -205,21 +182,8 @@ class RbacController extends Controller
         $request = new Request();
         if ($request->isPost){
             $roleForm->load($request->post());
-            if ($roleForm->validate()){
-                //>>验证通过更新角色信息
-                $role->name = $roleForm->name;
-                $role->description = $roleForm->desc;
-                $auth->update($name,$role);
-                //>>更新角色的权限
-                $auth->removeChildren($role);
-                if ($roleForm->per){
-                    foreach ($roleForm->per as $permissionName){
-                        $permission = $auth->getPermission($permissionName);
-                        $auth->addChild($role,$permission);
-                    }
-                }
-                //>>修改成功,跳转至列表页
-                //>>保存信息成功跳转页面
+            $roleForm->scenario = RoleForm::SCENARIO_UPD;
+            if ($roleForm->validate() && $roleForm->upd($name)){
                 \Yii::$app->session->setFlash("success","修改成功");
                 return $this->redirect("role-list");
             }

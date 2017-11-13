@@ -101,7 +101,7 @@ class MemberController extends Controller
         if ($response->Message=="OK"){
             $redis = new \Redis();
             $redis->connect("127.0.0.1");
-            $redis->set("tel_".$tel,$code);
+            $redis->set("tel_".$tel,$code,1800);
             return 1;
         }else{
             return 0;

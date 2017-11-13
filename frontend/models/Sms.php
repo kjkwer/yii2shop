@@ -13,8 +13,10 @@ use Aliyun\Core\Profile\DefaultProfile;
 use Aliyun\Core\DefaultAcsClient;
 use Aliyun\Api\Sms\Request\V20170525\SendSmsRequest;
 use Aliyun\Api\Sms\Request\V20170525\QuerySendDetailsRequest;
+use yii\base\Component;
+
 Config::load();
-class Sms
+class Sms extends Component
 {
     static $acsClient = null;
 

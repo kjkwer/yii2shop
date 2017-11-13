@@ -12,7 +12,7 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'layout' => false,  //不是用yii默认的主页面
-    'defaultRoute'=>'goods/list',//设置默认路由
+    'defaultRoute'=>'index/index',//设置默认路由
     'language'=>'zh-CN',  //设置语言
     'timeZone' => 'Asia/Shanghai',  //设置时区
     'components' => [

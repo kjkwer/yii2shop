@@ -41,7 +41,7 @@ class Menu extends ActiveRecord
         //>>创建模型对象
         $menu = self::find();
         $arr = [];
-        $arrAll = [];
+        $menuItems = [];
         //>>获取菜单页面所有数据
         $allMenuRoots = $menu->where(["=","parent_id","0"])->orderBy(["tree"=>"desc","lft"=>"asc","rgt"=>"asc"])->asArray()->all();
         //>>创建目录分级
@@ -56,10 +56,10 @@ class Menu extends ActiveRecord
                 }
             }
             if (!$arr["items"]==[]){
-                $arrAll[] = $arr;
+                $menuItems[] = $arr;
             }
         }
-        return $arrAll;
+        return $menuItems;
     }
     //>>添加数据
     public function add(){

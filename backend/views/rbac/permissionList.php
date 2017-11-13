@@ -20,8 +20,12 @@ header('content-type:text/html;charset=utf-8');
                     <td><?=$permission->name?></td>
                     <td><?=$permission->description?></td>
                     <td>
+                        <?php if (Yii::$app->user->can("rbac/permission-delete")):?>
                         <?=\yii\bootstrap\Html::button("删除",["class"=>"del btn btn-warning btn-xs","route"=>$permission->name])?>
+                        <?php endif;?>
+                        <?php if (Yii::$app->user->can("rbac/permission-update")):?>
                         <?=\yii\bootstrap\Html::a("修改",\yii\helpers\Url::to(["/rbac/permission-update","name"=>$permission->name]),["class"=>"btn btn-success btn-xs"])?>
+                        <?php endif;?>
                     </td>
                 </tr>
             <?php endforeach;?>
@@ -30,7 +34,6 @@ header('content-type:text/html;charset=utf-8');
     </div>
     <div class="row">
         <div class="col-lg-2">
-            <?=\yii\bootstrap\Html::a("添加",[\yii\helpers\Url::to(["/rbac/permission-add"])],["class"=>"btn btn-info"])?>
         </div>
         <div class="col-lg-8"></div>
         <div class="col-lg-2">

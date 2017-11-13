@@ -31,8 +31,12 @@ header('content-type:text/html;charset=utf-8');
                         <td><?=$brand->sort?></td>
                         <td><?=$brand->status==0?"隐藏":"显示"?></td>
                         <td>
+                            <?php if (Yii::$app->user->can("brand/del")):?>
                             <a href="javascript:;" class="del btn btn-warning btn-xs">删除</a>
+                            <?php endif; ?>
+                            <?php if (Yii::$app->user->can("brand/upd")):?>
                             <a href="<?=\yii\helpers\Url::to(["/brand/upd","id"=>$brand->id])?>" class="btn btn-success btn-xs">更新</a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach;?>
@@ -42,7 +46,6 @@ header('content-type:text/html;charset=utf-8');
     </div>
     <div class="row">
         <div class="col-lg-2">
-            <a href="/brand/add" class="btn btn-info btn-lg">添加</a>
         </div>
         <div class="col-lg-8"></div>
         <div class="col-lg-2">

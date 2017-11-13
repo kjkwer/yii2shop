@@ -24,7 +24,7 @@ class GoodsCategoryController extends Controller
         //>>创建分页工具
         $pager = new Pagination();
         $pager->totalCount = $model->find()->count();
-        $pager->pageSize = 4;
+        $pager->pageSize = 10;
         //>>获取当前也内容
         $goodsCategoryList = $model->find()->orderBy(["tree"=>"desc","lft"=>"asc","rgt"=>"asc"])->limit($pager->limit)->offset($pager->offset)->all();
         //>>显示视图

@@ -40,10 +40,18 @@ header('content-type:text/html;charset=utf-8');
                         <td><?=$goods->is_on_sale==1?"在售":"下架"?></td>
                         <td><?=\yii\bootstrap\Html::img($goods->logo,["width"=>"40px","height"=>"40px","class"=>"img-circle"])?></td>
                         <td>
+                            <?php if (Yii::$app->user->can("goods/del")):?>
                             <?=\yii\bootstrap\Html::button("删除",["class"=>"del btn btn-warning btn-xs"])?>
+                            <?php endif;?>
+                            <?php if (Yii::$app->user->can("goods/upd")):?>
                             <?=\yii\bootstrap\Html::a("修改",\yii\helpers\Url::to(["/goods/upd","id"=>$goods->id]),["class"=>"btn btn-success btn-xs"])?>
+                            <?php endif;?>
+                            <?php if (Yii::$app->user->can("goods/preview")):?>
                             <?=\yii\bootstrap\Html::a("预览",\yii\helpers\Url::to(["/goods/preview","id"=>$goods->id]),["class"=>"btn btn-info btn-xs"])?>
+                            <?php endif;?>
+                            <?php if (Yii::$app->user->can("goods/images-list")):?>
                             <?=\yii\bootstrap\Html::a("图库",\yii\helpers\Url::to(["/goods/images-list","id"=>$goods->id]),["class"=>"btn btn-default btn-xs"])?>
+                            <?php endif;?>
                         </td>
                     </tr>
                 <?php endforeach;?>
@@ -53,7 +61,6 @@ header('content-type:text/html;charset=utf-8');
     </div>
     <div class="row">
         <div class="col-lg-2">
-            <a href="/goods/add" class="btn btn-info btn-lg">添加</a>
         </div>
         <div class="col-lg-8"></div>
         <div class="col-lg-2">

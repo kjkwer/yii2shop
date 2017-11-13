@@ -30,7 +30,7 @@ class UserController extends Controller
         $userModel = new User();
         //>>创键分页工具
         $pager = new Pagination();
-        $pager->pageSize = 4;
+        $pager->pageSize = 10;
         $pager->totalCount = $userModel->find()->count();
         //>>查询当前分页的数据
         $userList = $userModel->find()->orderBy("id desc")->limit($pager->limit)->offset($pager->offset)->all();
@@ -208,7 +208,6 @@ class UserController extends Controller
                 'maxLength'=>4
             ]
         ];
-
     }
     //>>附加行为
     public function behaviors(){

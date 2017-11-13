@@ -2,11 +2,13 @@
 header('content-type:text/html;charset=utf-8');
 ?>
 <!--图片上传-->
+<?php if (Yii::$app->user->can("goods/add-images")):?>
 <div id="uploader-demo">
     <!--用来存放item-->
     <div id="fileList" class="uploader-list"></div>
     <div id="filePicker">选择图片</div>
 </div>
+<?php endif;?>
 <table class="table">
     <thead>
     <tr>
@@ -20,7 +22,9 @@ header('content-type:text/html;charset=utf-8');
         <tr>
             <td><?=\yii\bootstrap\Html::img($goodsGallery->path,["width"=>"100px","height"=>"100px"])?></td>
             <td>
+                <?php if (Yii::$app->user->can("goods/dele-images")):?>
                 <?=\yii\bootstrap\Html::button("删除",["class"=>"del btn btn-warning"])?>
+                <?php endif;?>
             </td>
         </tr>
     <?php endforeach;?>

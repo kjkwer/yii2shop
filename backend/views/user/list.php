@@ -27,8 +27,12 @@ header('content-type:text/html;charset=utf-8');
                         <td><?=$user->status==1?"启用":"禁用"?></td>
                         <td><?=date("Y-m-d H:i:s",$user->updated_at)?></td>
                         <td>
+                            <?php if (Yii::$app->user->can("user/del")):?>
                             <?=\yii\bootstrap\Html::button("删除",["class"=>"del btn btn-warning btn-xs"])?>
+                            <?php endif;?>
+                            <?php if (Yii::$app->user->can("user/upd")):?>
                             <?=\yii\bootstrap\Html::a("修改",[\yii\helpers\Url::to(["upd","id"=>$user->id])],["class"=>"btn btn-info btn-xs"])?>
+                            <?php endif;?>
                         </td>
                     </tr>
                 <?php endforeach;?>
@@ -38,7 +42,6 @@ header('content-type:text/html;charset=utf-8');
     </div>
     <div class="row">
         <div class="col-lg-2">
-            <?=\yii\bootstrap\Html::a("添加",[\yii\helpers\Url::to(["add"])],["class"=>"btn btn-primary btn-lg"])?>
         </div>
         <div class="col-lg-8"></div>
         <div class="col-lg-2">

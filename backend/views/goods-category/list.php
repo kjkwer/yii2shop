@@ -21,8 +21,12 @@ header('content-type:text/html;charset=utf-8');
                         <td><?=$goodsCategory->id?></td>
                         <td><?=str_repeat("==>",$goodsCategory->depth).$goodsCategory->name?></td>
                         <td>
+                            <?php if (Yii::$app->user->can("goods-category/del")):?>
                             <a href="javascript:;" class="del btn btn-warning btn-xs">删除</a>
+                            <?php endif;?>
+                            <?php if (Yii::$app->user->can("goods-category/upd")):?>
                             <a href="<?=\yii\helpers\Url::to(["/goods-category/upd","id"=>$goodsCategory->id])?>" class="btn btn-success btn-xs">更新</a>
+                            <?php endif;?>
                         </td>
                     </tr>
                 <?php endforeach;?>
@@ -32,7 +36,6 @@ header('content-type:text/html;charset=utf-8');
     </div>
     <div class="row">
         <div class="col-lg-2">
-            <a href="/goods-category/add" class="btn btn-info btn-lg">添加</a>
         </div>
         <div class="col-lg-8"></div>
         <div class="col-lg-2">

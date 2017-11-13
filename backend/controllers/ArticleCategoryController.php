@@ -23,7 +23,7 @@ class ArticleCategoryController extends Controller
         $model = new ArticleCategory();
         //>>创建分页工具
         $pager = new Pagination();
-        $pager->pageSize=4;
+        $pager->pageSize=10;
         $pager->totalCount=$model->find()->count();
         $articeCategoryList = $model->find()->andwhere(["!=","status","-1"])->limit($pager->limit)->offset($pager->offset)->all();
         //var_dump($brandList);exit();

@@ -22,8 +22,12 @@ header('content-type:text/html;charset=utf-8');
                     <td><?=str_repeat("====",$allMenu->depth).$allMenu->name?></td>
                     <td><?=$allMenu->url?></td>
                     <td>
+                        <?php if (Yii::$app->user->can("menu/del")):?>
                         <?=\yii\bootstrap\Html::button("删除",["class"=>"del btn btn-warning btn-xs","menuId"=>$allMenu->id])?>
+                        <?php endif;?>
+                        <?php if (Yii::$app->user->can("menu/upd")):?>
                         <?=\yii\bootstrap\Html::a("修改",\yii\helpers\Url::to(["/menu/upd","id"=>$allMenu->id]),["class"=>"btn btn-success btn-xs"])?>
+                        <?php endif;?>
                     </td>
                 </tr>
             <?php endforeach;?>
@@ -32,7 +36,6 @@ header('content-type:text/html;charset=utf-8');
     </div>
     <div class="row">
         <div class="col-lg-2">
-            <?=\yii\bootstrap\Html::a("添加",[\yii\helpers\Url::to(["/menu/add"])],["class"=>"btn btn-info"])?>
         </div>
         <div class="col-lg-8"></div>
         <div class="col-lg-2">

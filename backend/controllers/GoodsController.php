@@ -27,7 +27,7 @@ class GoodsController extends Controller
     //>>商品列表
     public function actionList(){
         //>>创建模型对象
-        $goodsModel = Goods::find();
+        $goodsModel = Goods::find()->where(["!=","status",0]);
         $goodsSearchForm = new GoodsSearchForm();
         $request = new Request();
         //>>设置搜索查询的信息
@@ -52,7 +52,7 @@ class GoodsController extends Controller
         //>>创建分页工具
         $pager = new Pagination();
         $pager->totalCount = $goodsModel->count();
-        $pager->pageSize = 4;
+        $pager->pageSize = 10;
         //查询当前页的数据
         $goodsList = $goodsModel->orderBy("sn desc")->limit($pager->limit)->offset($pager->offset)->all();
         //>>显示视图

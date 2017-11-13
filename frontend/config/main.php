@@ -11,14 +11,19 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'layout' => false,  //不是用yii默认的主页面
+    'defaultRoute'=>'goods/list',//设置默认路由
+    'language'=>'zh-CN',  //设置语言
+    'timeZone' => 'Asia/Shanghai',  //设置时区
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => \frontend\models\Memeber::className(),
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'loginUrl'=>["member/login"]
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend
@@ -36,14 +41,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+        //>>页面美化
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

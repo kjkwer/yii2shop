@@ -11,8 +11,8 @@ header('content-type:text/html;charset=utf-8');
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>品牌名称</th>
-                        <th>品牌简介</th>
+                        <th>目录名称</th>
+                        <th>目录简介</th>
                         <th>排序</th>
                         <th>状态</th>
                         <th>操作</th>
@@ -27,8 +27,12 @@ header('content-type:text/html;charset=utf-8');
                             <td><?=$articeCategory->sort?></td>
                             <td><?=$articeCategory->status==0?"隐藏":"显示"?></td>
                             <td>
+                                <?php if (Yii::$app->user->can('article-category/del')):?>
                                 <a href="javascript:;" class="del btn btn-warning btn-xs">删除</a>
+                                <?php endif;?>
+                                <?php if (Yii::$app->user->can('article-category/upd')):?>
                                 <a href="<?=\yii\helpers\Url::to(["/article-category/upd","id"=>$articeCategory->id])?>" class="btn btn-success btn-xs">更新</a>
+                                <?php endif;?>
                             </td>
                         </tr>
                     <?php endforeach;?>
@@ -38,7 +42,6 @@ header('content-type:text/html;charset=utf-8');
         </div>
         <div class="row">
             <div class="col-lg-2">
-                <a href="/article-category/add" class="btn btn-info btn-lg">添加</a>
             </div>
             <div class="col-lg-8"></div>
             <div class="col-lg-2">

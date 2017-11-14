@@ -47,9 +47,11 @@ class GoodsCategoryController extends Controller
                 //>>保存数据
                 if ($model->parent_id==0){
                     $model->makeRoot();
+                    GoodsCategory::saveRedis();
                 }else{
                     $parent = GoodsCategory::findOne(["id"=>$model->parent_id]);
                     $model->prependTo($parent);
+                    GoodsCategory::saveRedis();
                 }
                 return $this->redirect("list");
             }
@@ -78,9 +80,11 @@ class GoodsCategoryController extends Controller
                      */
                     if ($model->getOldAttribute("parent_id")==0) {
                         $model->save();
+                        GoodsCategory::saveRedis();
                     }else{
                         //>>makeRoot() 为嵌套集合自带的方法
                         $model->makeRoot();
+                        GoodsCategory::saveRedis();
                     }
                 }else{
                     $parent = GoodsCategory::findOne(["id"=>$model->parent_id]);
@@ -111,8 +115,10 @@ class GoodsCategoryController extends Controller
                 if ($model->parent_id==0){
                     //>>deleteWithChildren()为嵌套集合自带的方法
                     $model->deleteWithChildren();
+                    GoodsCategory::saveRedis();
                 }else{
                     $model->delete();
+                    GoodsCategory::saveRedis();
                 }
                 echo 1;
             }

@@ -146,19 +146,18 @@
             </div>
 
             <div class="cat_bd">
-
                 <?php foreach ($goodsCategoryList as $goodsCategory):?>
                     <div class="cat item1">
-                        <h3><a href=""><?=$goodsCategory->name?></a></h3>
-                        <?php if ($goodsCategoryChildList = \backend\models\GoodsCategory::findAll(["parent_id"=>$goodsCategory->id])):?>
+                        <h3><a href=""><?=$goodsCategory["name"]?></a></h3>
+                        <?php if (isset($goodsCategory["child"])):?>
                         <div class="cat_detail">
-                            <?php foreach ($goodsCategoryChildList as $goodsCategoryChild):?>
+                            <?php foreach ($goodsCategory["child"] as $goodsCategoryChild):?>
                             <dl class="dl_1st">
-                                <dt><a href=""><?=$goodsCategoryChild->name?></a></dt>
-                                <?php if ($goodsCategoryGrandsons = \backend\models\GoodsCategory::findAll(["parent_id"=>$goodsCategoryChild->id])):?>
+                                <dt><a href=""><?=$goodsCategoryChild["name"]?></a></dt>
+                                <?php if (isset($goodsCategoryChild["child"])):?>
                                     <dd>
-                                    <?php foreach ($goodsCategoryGrandsons as $goodsCategoryGrandson):?>
-                                        <a href=""><?=$goodsCategoryGrandson->name?></a>
+                                    <?php foreach ($goodsCategoryChild["child"] as $goodsCategoryGrandson):?>
+                                        <a href=""><?=$goodsCategoryGrandson["name"]?></a>
                                     <?php endforeach;?>
                                     </dd>
                                 <?php endif;?>
@@ -170,8 +169,6 @@
                         <?php endif;?>
                     </div>
                 <?php endforeach;?>
-
-
             </div>
 
         </div>

@@ -150,7 +150,7 @@
     function bindPhoneNum(){
         //>>获取电话,并验证电话格式
         var tel = $("#tel").val();
-        var regexp = /^1[3458][0-9]\d{4,8}$/;
+        var regexp = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
         if (regexp.test(tel)){
             $.get("<?=\yii\helpers\Url::to(["/member/check-sms"])?>",{"tel":tel},function (data) {
                 if (data==1){
@@ -278,7 +278,7 @@
     }, "验证码不正确");
 //>>自定义手机号验证规则
     jQuery.validator.addMethod("checkTel", function(value, element) {
-        var tel = /^1[3|4|5|8][0-9]\d{4,8}$/;
+        var tel = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
         return this.optional(element) || (tel.test(value));
     }, "请填写正确手机号码");
 </script>

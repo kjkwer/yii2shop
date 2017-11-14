@@ -28,8 +28,7 @@ class MemberController extends Controller
             $loginForm->load($request->post(),"");
             $loginForm->load($request->post(),"");
             if ($loginForm->validate() && $loginForm->checkLogin()){
-                //echo "登录成功";
-                //exit();
+                return $this->redirect("/index/index");
             }else{
                 var_dump($loginForm->getErrors());
                 echo "登录失败";
@@ -53,8 +52,7 @@ class MemberController extends Controller
                 if ($redis->get("tel_".$memeber->tel) == $request->post("tel_captcha")){
                     //>>验证通过
                     if ($memeber->validate() && $memeber->add()){
-                        echo "注册成功";
-                        exit();
+                        return $this->redirect("login");
                     }else{
                         var_dump($memeber->getErrors());
                         echo "注册失败";
@@ -133,6 +131,6 @@ class MemberController extends Controller
     public function actionTest(){
         $redis = new \Redis();
         $redis->connect("127.0.0.1");
-        var_dump($redis->get("tel_13551275272"));
+        var_dump($redis->get("tel_13551275376"));
     }
 }

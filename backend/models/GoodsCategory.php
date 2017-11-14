@@ -43,13 +43,13 @@ class GoodsCategory extends ActiveRecord
         //>>设计商品分级数据
         $categorys = [];
         foreach ($goodsCategoryList as $goodsCategory){
-            $arr = ["name"=>$goodsCategory->name];
+            $arr = ["name"=>$goodsCategory->name,"id"=>$goodsCategory->id];
             if ($goodsCategoryChildList = GoodsCategory::findAll(["parent_id"=>$goodsCategory->id])){
                 foreach ($goodsCategoryChildList as $goodsCategoryChild){
-                    $arr1 = ["name"=>$goodsCategoryChild->name];
+                    $arr1 = ["name"=>$goodsCategoryChild->name,"id"=>$goodsCategoryChild->id];
                     if ($goodsCategoryGrandsonList = GoodsCategory::findAll(["parent_id"=>$goodsCategoryChild->id])){
                         foreach ($goodsCategoryGrandsonList as $goodsCategoryGrandson){
-                            $arr2 = ["name"=>$goodsCategoryGrandson->name];
+                            $arr2 = ["name"=>$goodsCategoryGrandson->name,"id"=>$goodsCategoryGrandson->id];
                             $arr1["child"][] = $arr2;
                         }
                     }

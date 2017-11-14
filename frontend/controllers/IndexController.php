@@ -9,11 +9,13 @@
 namespace frontend\controllers;
 
 
+use backend\models\Goods;
 use backend\models\GoodsCategory;
 use yii\web\Controller;
 
 class IndexController extends Controller
 {
+    //>>显示商城首页
     public function actionIndex(){
         //>>从redis中获取商品分类所有的商品
         $redis = new \Redis();
@@ -25,51 +27,61 @@ class IndexController extends Controller
             "goodsCategoryList"=>$goodsCategoryList
         ]);
     }
-    public function actionTest(){
-        //>>链接redis
-        $redis = new \Redis();
-        $redis->connect("127.0.0.1");
-        //>>获取所有商品
-        $goodsCategoryList = GoodsCategory::find()->where(["parent_id"=>0])->all();
-        //>>设计商品分级数据
-        $categorys = [];
-        foreach ($goodsCategoryList as $goodsCategory){
-            $arr = ["name"=>$goodsCategory->name];
-            if ($goodsCategoryChildList = GoodsCategory::findAll(["parent_id"=>$goodsCategory->id])){
-                foreach ($goodsCategoryChildList as $goodsCategoryChild){
-                    $arr1 = ["name"=>$goodsCategoryChild->name];
-                    if ($goodsCategoryGrandsonList = GoodsCategory::findAll(["parent_id"=>$goodsCategoryChild->id])){
-                        foreach ($goodsCategoryGrandsonList as $goodsCategoryGrandson){
-                            $arr2 = ["name"=>$goodsCategoryGrandson->name];
-                            $arr1["child"][] = $arr2;
-                        }
+    //>>显示商品列表页
+    public function actionGoodsList($id){
+        //>>判断给分类是否为三级分类
+        if(!GoodsCategory::findAll(["parent_id"=>$id])){
+            //>>是三级分类,获取该分类下的所有商品
+            $goodsList = Goods::findAll(["goods_category_id"=>$id,"is_on_sale"=>1]);
+        }else{
+            //>>不是三级分类
+            $depth = GoodsCategory::findOne(["id"=>$id])->depth;//该分类所在层级
+            if ($depth==1){
+                //>>为二级分类,获取所有三级分类目录
+                $threeCategoryList = GoodsCategory::findAll(["parent_id"=>$id]);
+                //>>获取所有目录下的所有商品
+                $goodsList = [];
+                foreach ($threeCategoryList as $threeCategory){
+                    $goodses = Goods::findALL(["goods_category_id"=>$threeCategory->id]);
+                    foreach ($goodses as $goods){
+                        $goodsList[] = $goods;
                     }
-                    $arr["child"][] = $arr1;
                 }
             }
-            $categorys[] = $arr;
+            if ($depth==0){
+                //>>为一级目录,获取所有二级目录
+                $twoCategoryList = GoodsCategory::findAll(["parent_id"=>$id]);
+                //>>获取所有三级目录
+                $threeCategoryList = [];
+                foreach ($twoCategoryList as $twoCategory){
+                    $array = GoodsCategory::findAll(["parent_id"=>$twoCategory->id]);
+                    foreach ($array as $arr){
+                        $threeCategoryList[] = $arr;
+                    }
+                }
+                //>>获取该一级分类下所有商品信息
+                $goodsList = [];
+                foreach ($threeCategoryList as $threeCategory){
+                    $goodses = Goods::findALL(["goods_category_id"=>$threeCategory->id]);
+                    foreach ($goodses as $goods){
+                        $goodsList[] = $goods;
+                    }
+                }
+            }
         }
-        //var_dump($categorys);exit();
-        //>>将数据全部保存到redis中
-        $redis->delete('goodsCategory');
-        foreach ($categorys as $category){
-            $category = serialize($category);
-            $redis->lPush("goodsCategory",$category);
-        }
-    }
-    public function actionTest1(){
+        //>>从redis中获取商品分类所有的商品
         $redis = new \Redis();
         $redis->connect("127.0.0.1");
-        $datas = $redis->lRange('goodsCategory', 0, -1);
-        $goodsCategoryList = [];
-        foreach ($datas as $data){
-            $goodsCategoryList[] = unserialize($data);
-        }
-        var_dump($goodsCategoryList);
+        $goodsCategoryList = GoodsCategory::getRedis();
+        //>>显示页面
+        //var_dump($goodsList);exit();
+        return $this->render("list",[
+            "goodsList"=>$goodsList,
+            "goodsCategoryList"=>$goodsCategoryList
+        ]);
     }
-    public function actionTest2(){
-//        $redis = new \Redis();
-//        $redis->connect("127.0.0.1");
-//        $redis->delete('goodsCategory');
+    //>>显示商品详情页
+    public function actionGoodsIntro($id){
+        echo 111;
     }
 }

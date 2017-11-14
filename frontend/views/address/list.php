@@ -149,16 +149,16 @@
             <div class="cat_bd none">
                 <?php foreach ($goodsCategoryList as $goodsCategory):?>
                     <div class="cat item1">
-                        <h3><a href=""><?=$goodsCategory["name"]?></a></h3>
+                        <h3><a href="<?=\yii\helpers\Url::to(["/index/goods-list","id"=>$goodsCategory["id"]])?>"><?=$goodsCategory["name"]?></a></h3>
                         <?php if (isset($goodsCategory["child"])):?>
                             <div class="cat_detail">
                                 <?php foreach ($goodsCategory["child"] as $goodsCategoryChild):?>
                                     <dl class="dl_1st">
-                                        <dt><a href=""><?=$goodsCategoryChild["name"]?></a></dt>
+                                        <dt><a href="<?=\yii\helpers\Url::to(["/index/goods-list","id"=>$goodsCategoryChild["id"]])?>" categoryId="<?=$goodsCategoryChild["id"]?>"><?=$goodsCategoryChild["name"]?></a></dt>
                                         <?php if (isset($goodsCategoryChild["child"])):?>
                                             <dd>
                                                 <?php foreach ($goodsCategoryChild["child"] as $goodsCategoryGrandson):?>
-                                                    <a href=""><?=$goodsCategoryGrandson["name"]?></a>
+                                                    <a href="<?=\yii\helpers\Url::to(["/index/goods-list","id"=>$goodsCategoryGrandson["id"]])?>"  categoryId="<?=$goodsCategoryGrandson["id"]?>"><?=$goodsCategoryGrandson["name"]?></a>
                                                 <?php endforeach;?>
                                             </dd>
                                         <?php endif;?>

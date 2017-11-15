@@ -48,7 +48,7 @@ header('content-type:text/html;charset=utf-8');
             <?php
             echo \yii\widgets\LinkPager::widget([
                 "pagination"=>$pager,
-                "maxButtonCount"=>3
+                "maxButtonCount"=>5
             ])
             ?>
         </div>

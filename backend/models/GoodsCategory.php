@@ -134,7 +134,7 @@ class GoodsCategory extends ActiveRecord
     }
 
 
-    
+
     //>>==========嵌套集合插件配置=====================
     public function behaviors() {
         return [

@@ -11,8 +11,13 @@ namespace frontend\controllers;
 
 use backend\models\Goods;
 use backend\models\GoodsCategory;
+use backend\models\GoodsGallery;
+use backend\models\GoodsIntro;
+use frontend\models\Cart;
 use yii\data\Pagination;
+use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\Request;
 
 class IndexController extends Controller
 {
@@ -93,7 +98,7 @@ class IndexController extends Controller
         //var_dump($child);exit();
         //>>设计分页工具
         $pager = new Pagination();
-        $pager->pageSize = 20;
+        $pager->pageSize = 12;
         $pager->totalCount = $model->where(["in","goods_category_id",$ids])->andWhere(["=","is_on_sale",1])->count();
         //>>获取当前页的商品数据
         $goodsList = $model->limit($pager->limit)->offset($pager->offset)->all();
@@ -101,10 +106,44 @@ class IndexController extends Controller
         //var_dump($goodsList);exit();
         return $this->render("list",[
             "goodsList"=>$goodsList,
+            "pager"=>$pager
         ]);
     }
     //>>显示商品详情页
     public function actionGoodsIntro($id){
-        echo 111;
+        //>>获取商品信息
+        $goodsMessage = Goods::findOne(["id"=>$id]);
+        //>>获取商品相册的图片
+        $goodsGalleryList = GoodsGallery::find()->where(["goods_id"=>$goodsMessage->id])->orderBy("id desc")->all();
+        //>>查询到商品详情
+        $goodsIntros = GoodsIntro::findOne(["goods_id"=>$goodsMessage->id]);
+        //>>查询该商品的分类层级
+        $threeCategory = GoodsCategory::findOne(["id"=>$goodsMessage->goods_category_id]);
+        $twoCategory = GoodsCategory::findOne(["id"=>$threeCategory->parent_id]);
+        $oneCategory = GoodsCategory::findOne(["id"=>$twoCategory->parent_id]);
+        //>>接收表单提交信息
+        $request = new Request();
+        if ($request->isPost){
+            if (\Yii::$app->user->isGuest){
+                //>>尚未登录
+                return $this->redirect(Url::to(["/member/login"]));
+            }
+            //>>已登录
+            $cart = new Cart();
+            $cart->load($request->post(),"");
+            if ($cart->validate() && $cart->addGoods($id)){
+                //>>添加购物车成功,跳转至购物车列表页
+                return $this->redirect("/cart/list");
+            }
+        }
+        //>>显示视图
+        return $this->render("goodsIntro",[
+            "goodsMessage"=>$goodsMessage,
+            "threeCategory"=>$threeCategory,
+            "twoCategory"=>$twoCategory,
+            "oneCategory"=>$oneCategory,
+            "goodsGalleryList"=>$goodsGalleryList,
+            "goodsIntros"=>$goodsIntros
+        ]);
     }
 }

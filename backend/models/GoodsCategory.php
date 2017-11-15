@@ -77,6 +77,7 @@ class GoodsCategory extends ActiveRecord
         }
         return $goodsCategoryList;
     }
+    //>>
     //>>==========嵌套集合插件配置=====================
     public function behaviors() {
         return [

@@ -67,7 +67,7 @@ class MemberController extends Controller
     //>>注销登录
     public function actionLogout(){
         \Yii::$app->user->logout();
-        return $this->redirect("login");
+        return $this->redirect("/index/index");
     }
     //>>验证用户名是否重复
     public function actionCheckUsername($username){

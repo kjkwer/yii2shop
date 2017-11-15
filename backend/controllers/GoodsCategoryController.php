@@ -51,7 +51,7 @@ class GoodsCategoryController extends Controller
                     $parent = GoodsCategory::findOne(["id"=>$model->parent_id]);
                     $model->prependTo($parent);
                 }
-                GoodsCategory::saveRedis();
+                GoodsCategory::deleteRedisCategory();
                 return $this->redirect("list");
             }
         }
@@ -88,7 +88,7 @@ class GoodsCategoryController extends Controller
                     //>>prependTo() 为嵌套集合自带的方法
                     $model->prependTo($parent);
                 }
-                GoodsCategory::saveRedis();
+                GoodsCategory::deleteRedisCategory();
                 return $this->redirect("list");
             }
         }
@@ -116,7 +116,7 @@ class GoodsCategoryController extends Controller
                 }else{
                     $model->delete();
                 }
-                GoodsCategory::saveRedis();
+                GoodsCategory::deleteRedisCategory();
                 echo 1;
             }
         }

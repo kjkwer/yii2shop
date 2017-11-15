@@ -22,15 +22,12 @@ class AddressController extends Controller
         if(\Yii::$app->user->isGuest){
             return $this->redirect(Url::to(["/member/login"]));
         }
-        //>>获取商品分类数据
-        $goodsCategoryList = GoodsCategory::getRedis();
         //>>查找当前用户收藏的地址
         $address = new Address();
         $addressList = $address->find()->where(["memeber_id"=>\Yii::$app->user->identity->id])->orderBy('status desc')->all();
         //>>显示页面
         return $this->render("list",[
             "addressList"=>$addressList,
-            "goodsCategoryList"=>$goodsCategoryList
         ]);
     }
     //>>添加地址

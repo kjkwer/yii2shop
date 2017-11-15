@@ -145,31 +145,7 @@
                 <em></em>
             </div>
 
-            <div class="cat_bd">
-                <?php foreach ($goodsCategoryList as $goodsCategory):?>
-                    <div class="cat item1">
-                        <h3><a href="<?=\yii\helpers\Url::to(["/index/goods-list","id"=>$goodsCategory["id"]])?>"><?=$goodsCategory["name"]?></a></h3>
-                        <?php if (isset($goodsCategory["child"])):?>
-                            <div class="cat_detail">
-                                <?php foreach ($goodsCategory["child"] as $goodsCategoryChild):?>
-                                    <dl class="dl_1st">
-                                        <dt><a href="<?=\yii\helpers\Url::to(["/index/goods-list","id"=>$goodsCategoryChild["id"]])?>" categoryId="<?=$goodsCategoryChild["id"]?>"><?=$goodsCategoryChild["name"]?></a></dt>
-                                        <?php if (isset($goodsCategoryChild["child"])):?>
-                                            <dd>
-                                                <?php foreach ($goodsCategoryChild["child"] as $goodsCategoryGrandson):?>
-                                                    <a href="<?=\yii\helpers\Url::to(["/index/goods-list","id"=>$goodsCategoryGrandson["id"]])?>"  categoryId="<?=$goodsCategoryGrandson["id"]?>"><?=$goodsCategoryGrandson["name"]?></a>
-                                                <?php endforeach;?>
-                                            </dd>
-                                        <?php endif;?>
-                                    </dl>
-                                <?php endforeach;?>
-                            </div>
-                        <?php else:?>
-                            <div class="cat_detail none"></div>
-                        <?php endif;?>
-                    </div>
-                <?php endforeach;?>
-            </div>
+            <?=\backend\models\GoodsCategory::categoryNavToRedis()?>
 
         </div>
         <!--  商品分类部分 end-->

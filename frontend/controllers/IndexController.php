@@ -18,15 +18,8 @@ class IndexController extends Controller
 {
     //>>显示商城首页
     public function actionIndex(){
-        //>>从redis中获取商品分类所有的商品
-        $redis = new \Redis();
-        $redis->connect("127.0.0.1");
-        $goodsCategoryList = GoodsCategory::getRedis();
-        //var_dump($goodsCategoryList);exit();
         //>>显示首页
-        return $this->render("index",[
-            "goodsCategoryList"=>$goodsCategoryList
-        ]);
+        return $this->render("index");
     }
     //>>显示商品列表页
     public function actionGoodsList($id){
@@ -89,7 +82,7 @@ class IndexController extends Controller
 //                }
 //            }
             /**
-             * 方法三:
+             * 方法三:用户嵌套集合插件中方法查询所有的三级分类
              */
             $goodsCategory = GoodsCategory::findOne(["id"=>$id]);
             //>>children()为嵌套集合插件中的方法,可以查询下层级的数据,如果不带参数,则查询所有向下层级的数据
@@ -104,15 +97,10 @@ class IndexController extends Controller
         $pager->totalCount = $model->where(["in","goods_category_id",$ids])->andWhere(["=","is_on_sale",1])->count();
         //>>获取当前页的商品数据
         $goodsList = $model->limit($pager->limit)->offset($pager->offset)->all();
-        //>>从redis中获取商品分类所有的商品分类信息
-        $redis = new \Redis();
-        $redis->connect("127.0.0.1");
-        $goodsCategoryList = GoodsCategory::getRedis();
         //>>显示页面
         //var_dump($goodsList);exit();
         return $this->render("list",[
             "goodsList"=>$goodsList,
-            "goodsCategoryList"=>$goodsCategoryList
         ]);
     }
     //>>显示商品详情页

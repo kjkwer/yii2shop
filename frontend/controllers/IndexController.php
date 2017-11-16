@@ -98,7 +98,7 @@ class IndexController extends Controller
         //var_dump($child);exit();
         //>>设计分页工具
         $pager = new Pagination();
-        $pager->pageSize = 12;
+        $pager->pageSize = 8;
         $pager->totalCount = $model->where(["in","goods_category_id",$ids])->andWhere(["=","is_on_sale",1])->count();
         //>>获取当前页的商品数据
         $goodsList = $model->limit($pager->limit)->offset($pager->offset)->all();
@@ -121,21 +121,6 @@ class IndexController extends Controller
         $threeCategory = GoodsCategory::findOne(["id"=>$goodsMessage->goods_category_id]);
         $twoCategory = GoodsCategory::findOne(["id"=>$threeCategory->parent_id]);
         $oneCategory = GoodsCategory::findOne(["id"=>$twoCategory->parent_id]);
-        //>>接收表单提交信息
-        $request = new Request();
-        if ($request->isPost){
-            if (\Yii::$app->user->isGuest){
-                //>>尚未登录
-                return $this->redirect(Url::to(["/member/login"]));
-            }
-            //>>已登录
-            $cart = new Cart();
-            $cart->load($request->post(),"");
-            if ($cart->validate() && $cart->addGoods($id)){
-                //>>添加购物车成功,跳转至购物车列表页
-                return $this->redirect("/cart/list");
-            }
-        }
         //>>显示视图
         return $this->render("goodsIntro",[
             "goodsMessage"=>$goodsMessage,

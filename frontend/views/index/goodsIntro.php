@@ -336,7 +336,7 @@
                     <li><span>上架时间：</span><?=date("Y-m-d",$goodsMessage->create_time)?></li>
                     <li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
                 </ul>
-                <form action="" method="post" class="choose">
+                <form action="/cart/add?id=<?=$goodsMessage->id?>" method="post" class="choose">
                     <input name="_csrf-frontend" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
                     <ul>
 

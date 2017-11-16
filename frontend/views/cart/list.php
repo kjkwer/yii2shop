@@ -73,16 +73,16 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($cartList as $cart):?>
-            <tr id="<?=$cart->id?>">
-                <td class="col1"><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$cart->goods_id])?>"><img src="<?="http://www.yii2shopadmin.com".$cart->goodsMessage->logo?>" alt="" /></a>  <strong><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$cart->goods_id])?>"><?=$cart->goodsMessage->name?></a></strong></td>
-                <td class="col3">￥<span><?=$cart->goodsMessage->shop_price?></span></td>
+        <?php foreach ($goodsList as $goods):?>
+            <tr id="<?=$goods->id?>">
+                <td class="col1"><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><img src="<?="http://www.yii2shopadmin.com".$goods->logo?>" alt="" /></a>  <strong><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><?=$goods->name?></a></strong></td>
+                <td class="col3">￥<span><?=$goods->shop_price?></span></td>
                 <td class="col4">
                     <a href="javascript:;" class="reduce_num clickUpdateAmountdown"></a>
-                    <input type="text" name="amount" value="<?=$cart->amount?>" class="amount"/>
+                    <input type="text" name="amount" value="<?=$carts[$goods->id]?>" class="amount"/>
                     <a href="javascript:;" class="add_num clickUpdateAmountup"></a>
                 </td>
-                <td class="col5">￥<span><?php $price=$cart->amount*$cart->goodsMessage->shop_price; $totalPrice+=$price; echo $price?></span></td>
+                <td class="col5">￥<span><?php $price=$carts[$goods->id]*$goods->shop_price; $totalPrice+=$price; echo $price?></span></td>
                 <td class="col6"><a href="javascript:;" class="delete">删除</a></td>
             </tr>
         <?php endforeach;?>
@@ -132,13 +132,13 @@
 <script type="text/javascript">
     //>>修改数据
     $(".amount").change(function () {
-        //>>获取当前数量和该条记录的id
+        //>>获取当前数量和该条商品的i
         var amount = $(this).val()
-        var id = $(this).closest("tr").attr("id");
+        var goods_id = $(this).closest("tr").attr("id");
         //>>将该数量发送至服务器
-        $.get("/cart/update-amount",{
+        $.post("/cart/update-amount",{
             "amount":amount,
-            "id":id
+            "goods_id":goods_id
         })
     })
     //>>点击加号和减号更新数据
@@ -146,12 +146,12 @@
         //>>查找到当前按钮所控制的输入框
         var amount = $(this).closest("tr").find(".amount").val();
         amount = Number(amount)+1;
-        //>>获取该条数据的id
-        var id = $(this).closest("tr").attr("id");
+        //>>获取该条数据的商品id
+        var goods_id = $(this).closest("tr").attr("id");
         //>>将该数量发送至服务器
-        $.get("/cart/update-amount",{
+        $.post("/cart/update-amount",{
             "amount":amount,
-            "id":id
+            "goods_id":goods_id
         })
     })
     $(".clickUpdateAmountdown").click(function () {
@@ -159,22 +159,22 @@
         var amount = $(this).closest("tr").find(".amount").val();
         amount = Number(amount)-1;
         //>>获取该条数据的id
-        var id = $(this).closest("tr").attr("id");
+        var goods_id = $(this).closest("tr").attr("id");
         //>>将该数量发送至服务器
-        $.get("/cart/update-amount",{
+        $.post("/cart/update-amount",{
             "amount":amount,
-            "id":id
+            "goods_id":goods_id
         })
     })
     //>>删除数据
     $(".delete").click(function () {
         if(confirm("是否确认删除")){
             //>>获取该条数据的id
-            var id = $(this).closest("tr").attr("id");
+            var goods_id = $(this).closest("tr").attr("id");
             var that = $(this)
             //>>将请求数据发送至服务器
-            $.get("/cart/delete",{
-                "id":id
+            $.post("/cart/delete",{
+                "goods_id":goods_id
             },function (data) {
                 if (data){
                     alert("删除成功");

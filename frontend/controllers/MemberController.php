@@ -28,6 +28,10 @@ class MemberController extends Controller
             $loginForm->load($request->post(),"");
             $loginForm->load($request->post(),"");
             if ($loginForm->validate() && $loginForm->checkLogin()){
+                /**
+                 * 获取cookie中的购物信息
+                 */
+                //>>1 获取购物车中的信息
                 return $this->redirect("/index/index");
             }else{
                 var_dump($loginForm->getErrors());

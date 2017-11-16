@@ -448,13 +448,6 @@
                 <?php endforeach;?>
             </ul>
         </div>
-        <table>
-            <tr>
-                <td>
-
-                </td>
-            </tr>
-        </table>
         <!-- 商品列表 end-->
 
 <!--         分页信息 start-->
@@ -472,6 +465,11 @@
 <!--                <em>共8页&nbsp;&nbsp;到第 <input type="text" class="page_num" value="3"/> 页</em>-->
 <!--                <a href="" class="skipsearch" href="javascript:;">确定</a>-->
 <!--            </span>-->
+            <?php
+            echo \yii\widgets\LinkPager::widget([
+                "pagination"=>$pager,
+            ])
+            ?>
         </div>
 <!--         分页信息 end-->
 

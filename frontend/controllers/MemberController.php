@@ -10,6 +10,7 @@ namespace frontend\controllers;
 
 
 use Codeception\Module\Redis;
+use frontend\models\Cart;
 use frontend\models\LoginForm;
 use frontend\models\Memeber;
 use frontend\models\RegisterForm;
@@ -28,10 +29,9 @@ class MemberController extends Controller
             $loginForm->load($request->post(),"");
             $loginForm->load($request->post(),"");
             if ($loginForm->validate() && $loginForm->checkLogin()){
-                /**
-                 * 获取cookie中的购物信息
-                 */
-                //>>1 获取购物车中的信息
+                //>>登陆成功,将cookie的购物车中的信息,追加在用户的购物车中
+                Cart::cookieToUser();
+                //>>跳转至商品首页
                 return $this->redirect("/index/index");
             }else{
                 var_dump($loginForm->getErrors());

@@ -26,10 +26,7 @@ class CartController extends Controller
             //>>读取cookie的信息
             $carts = Cart::getCookies();
             //>>获取所有商品的id
-            $ids = [];
-            foreach ($carts as $k=>$cart){
-                $ids[] = $k;
-            }
+            $ids = array_keys($carts);
         }else{
             //>>用户已登录
             //>>获取当前用户的购物车列表

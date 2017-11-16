@@ -303,8 +303,8 @@
             <!-- 图片预览区域 start -->
             <div class="preview fl">
                 <div class="midpic">
-                    <a href="<?="http://www.yii2shopadmin.com".$goodsMessage->logo?>" class="jqzoom" rel="gal1">   <!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
-                        <img src="<?="http://www.yii2shopadmin.com".$goodsMessage->logo?>" width="350px" height="350px" alt="" />               <!-- 第一幅图片的中图 -->
+                    <a href="<?=Yii::$app->params['adminImage'].$goodsMessage->logo?>" class="jqzoom" rel="gal1">   <!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
+                        <img src="<?=Yii::$app->params['adminImage'].$goodsMessage->logo?>" width="350px" height="350px" alt="" />               <!-- 第一幅图片的中图 -->
                     </a>
                 </div>
 
@@ -317,7 +317,7 @@
                         <ul>
                             <?php foreach ($goodsGalleryList as $k=>$goodsGallery):?>
                                 <li <?=$k==0?"class='cur'":""?>>
-                                    <a <?=$k==0?"class='zoomThumbActive'":""?> href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?="http://www.yii2shopadmin.com".$goodsGallery->path?>',largeimage: '<?="http://www.yii2shopadmin.com".$goodsGallery->path?>'}"><img src="<?="http://www.yii2shopadmin.com".$goodsGallery->path?>"></a>
+                                    <a <?=$k==0?"class='zoomThumbActive'":""?> href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=Yii::$app->params['adminImage'].$goodsGallery->path?>',largeimage: '<?="http://www.yii2shopadmin.com".$goodsGallery->path?>'}"><img src="<?=Yii::$app->params['adminImage'].$goodsGallery->path?>"></a>
                                 </li>
                             <?php endforeach;?>
                         </ul>

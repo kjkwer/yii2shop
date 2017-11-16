@@ -75,14 +75,14 @@
         <tbody>
         <?php foreach ($goodsList as $goods):?>
             <tr id="<?=$goods->id?>">
-                <td class="col1"><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><img src="<?="http://www.yii2shopadmin.com".$goods->logo?>" alt="" /></a>  <strong><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><?=$goods->name?></a></strong></td>
+                <td class="col1"><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><img src="<?=Yii::$app->params['adminImage'].$goods->logo?>" alt="" /></a>  <strong><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><?=$goods->name?></a></strong></td>
                 <td class="col3">￥<span><?=$goods->shop_price?></span></td>
                 <td class="col4">
                     <a href="javascript:;" class="reduce_num clickUpdateAmountdown"></a>
                     <input type="text" name="amount" value="<?=$carts[$goods->id]?>" class="amount"/>
                     <a href="javascript:;" class="add_num clickUpdateAmountup"></a>
                 </td>
-                <td class="col5">￥<span><?php $price=$carts[$goods->id]*$goods->shop_price; $totalPrice+=$price; echo $price?></span></td>
+                <td class="col5">￥<span><?php $price=$carts[$goods->id]*$goods->shop_price; $totalPrice+=$price; echo sprintf("%.2f",$price)?></span></td>
                 <td class="col6"><a href="javascript:;" class="delete">删除</a></td>
             </tr>
         <?php endforeach;?>

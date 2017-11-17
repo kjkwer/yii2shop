@@ -89,13 +89,13 @@
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="6">购物金额总计： <strong>￥ <span id="total"><?=$totalPrice?></span></strong></td>
+            <td colspan="6">购物金额总计： <strong>￥ <span id="total"><?=sprintf("%.2f",$totalPrice)?></span></strong></td>
         </tr>
         </tfoot>
     </table>
     <div class="cart_btn w990 bc mt10">
         <a href="<?=\yii\helpers\Url::to(["/index/index"])?>" class="continue">继续购物</a>
-        <a href="" class="checkout">结 算</a>
+        <a href="/order/index" class="checkout">结 算</a>
     </div>
 </div>
 <!-- 主体部分 end -->
@@ -178,7 +178,7 @@
             },function (data) {
                 if (data){
                     alert("删除成功");
-                    that.closest("tr").fadeOut()
+                    that.closest("tr").fadeOut();
                 }else {
                     alert("删除失败")
                 }

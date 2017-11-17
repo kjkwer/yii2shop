@@ -18,14 +18,14 @@ class Cart extends ActiveRecord
     public function rules()
     {
         return [
-            [["amount"],"required"]
+            [["amount","goods_id"],"required"]
         ];
     }
     //>>添加新的商品
-    public function addGoods($id){
+    public function addGoods(){
         if (\Yii::$app->user->isGuest){
             //>>接收参数
-            $goods_id = $id;
+            $goods_id = $this->goods_id;
             $amount = \Yii::$app->request->post("amount");
             //>>读取cookie的信息
             $carts = self::getCookies();
@@ -39,14 +39,13 @@ class Cart extends ActiveRecord
             return true;
         }else{
             //>>判断用户购物车中是否已存在该商品
-            if ($cartModel = Cart::find()->where(["goods_id"=>$id])->andWhere(["member_id"=>\Yii::$app->user->identity->id])->one()){
+            if ($cartModel = Cart::find()->where(["goods_id"=>$this->goods_id])->andWhere(["member_id"=>\Yii::$app->user->identity->id])->one()){
                 //>>已存在
                 $cartModel->amount = $cartModel->amount+$this->amount;
                 if ($cartModel->save()){
                     return true;
                 }
             }else{
-                $this->goods_id = $id;
                 $this->member_id = \Yii::$app->user->identity->id;
                 if ($this->save()){
                     return true;
@@ -63,6 +62,9 @@ class Cart extends ActiveRecord
     public static function getCookies(){
         $cookies = \Yii::$app->request->cookies;
         $carts = unserialize($cookies->getValue("carts"));
+        if (!$carts){
+            $carts = [];
+        }
         return $carts;
     }
     //>>保存cookie购物车信息

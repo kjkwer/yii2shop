@@ -8,12 +8,9 @@
 
 namespace frontend\controllers;
 
-
 use backend\models\Goods;
 use frontend\models\Cart;
-use yii\helpers\Url;
 use yii\web\Controller;
-use yii\web\Cookie;
 use yii\web\Request;
 
 class CartController extends Controller
@@ -91,18 +88,14 @@ class CartController extends Controller
         return false;
     }
     //>>增加购物车商品
-    public function actionAdd($id){
+    public function actionAdd(){
         //>>接收表单提交信息
         $request = new Request();
         $cart = new Cart();
         $cart->load($request->post(),"");
-        if ($cart->validate() && $cart->addGoods($id)){
+        if ($cart->validate() && $cart->addGoods()){
             //>>添加购物车成功,跳转至购物车列表页
             return $this->redirect("/cart/list");
         }
-    }
-    public function actionTest(){
-        $cookies = \Yii::$app->response->cookies;
-
     }
 }

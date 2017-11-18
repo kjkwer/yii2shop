@@ -14,6 +14,7 @@ use frontend\models\Address;
 use frontend\models\Cart;
 use frontend\models\Order;
 use frontend\models\OrderGoods;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\Request;
 
@@ -60,27 +61,93 @@ class OrderController extends Controller
     }
     //>>生成订单
     public function actionAdd(){
+        //>>获取数据
+        $request  = new Request();
+        $data = $request->post();
         $order = new Order();
         //>>创建订单表
-        if ($order->add()){
-            //>>创建订单详情表
-            $carts = Cart::find()->where(["member_id"=>\Yii::$app->user->getId()])->all();
-            foreach ($carts as $cart){
-                $orderGoods = new OrderGoods();
-                if ($orderGoods->add($order->id,$cart)){
-                    //>>创建成功,删除购物车中的数据
-                    $cart->delete();
-                }
-            }
-            //>>跳转到订单列表页
-            return true;
+        $carts = Cart::find()->where(["member_id"=>\Yii::$app->user->getId()])->all();
+        //>>用户id
+        $order->member_id = \Yii::$app->user->getId();
+        //>>地址信息
+        $address = Address::findOne(["id"=>$data["address_id"]]);//地址信息
+        $order->name = $address->username;
+        $order->province = $address->provinces;
+        $order->city = $address->cities;
+        $order->area = $address->areas;
+        $order->address = $address->address;
+        $order->tel = $address->tel;
+        //>>配送方式
+        $order->delivery_id = Order::$delivery[$data["delivery"]][0];
+        $order->delivery_name = Order::$delivery[$data["delivery"]][1];
+        $order->delivery_price = Order::$delivery[$data["delivery"]][2];
+        //>>支付方式
+        $order->payment_id = Order::$pay[$data["pay"]][0];
+        $order->payment_name = Order::$pay[$data["pay"]][1];
+        //>>订单金额
+        $order->total = 0;
+        foreach ($carts as $cart){
+            $goods = Goods::findOne(["id"=>$cart->goods_id]);
+            $order->total += $goods->shop_price*$cart->amount;
         }
-        return false;
+        $order->total += $order->delivery_price;
+        //>>订单状态,交易号,创建时间
+        $order->status = 1;
+        $order->trade_no = uniqid();
+        $order->create_time = time();
+        //>>开启事务
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            if ($order->save()){
+                //>>创建订单详情表
+                foreach ($carts as $cart){
+                    $orderGoods = new OrderGoods();
+                    $goods = Goods::findOne(["id"=>$cart->goods_id]);
+                    if ($cart->amount > $goods->stock){
+                        throw new Exception($goods->name."库存不足");
+                    }
+                    $orderGoods->order_id = $order->id;
+                    $orderGoods->goods_id = $cart->goods_id;
+                    $orderGoods->goods_name = $goods->name;
+                    $orderGoods->logo = $goods->logo;
+                    $orderGoods->price = $goods->shop_price;
+                    $orderGoods->amount = $cart->amount;
+                    $orderGoods->total = $goods->shop_price*$cart->amount;
+                    $orderGoods->save();
+                    //>>减少商品库存
+                    $goods->stock -= $orderGoods->amount;
+                    $goods->save();
+                }
+                //删除购物车
+                Cart::deleteAll('member_id='.\Yii::$app->user->id);
+                $order->save();
+            }
+            //>>提交事务
+            $transaction->commit();
+        }catch (Exception $e){
+            //>>回滚
+            $transaction->rollBack();
+            //>>输出错误信息
+            echo $e->getMessage();
+        }
     }
     //>>显示订单提交成功页面
-    public function actionList(){
+    public function actionSuccess(){
         //>>显示页面
         return $this->render("success");
     }
-    
+    //>>显示用户订单列表
+    public function actionList(){
+        //>>判断用户是否登录
+        if (\Yii::$app->user->isGuest){
+            //>>尚未登录
+            return $this->redirect("/member/login");
+        }
+        //>>获取用户所有的订单信息
+        $orderList = Order::findAll(["member_id"=>\Yii::$app->user->getId()]);
+        //>>显示列表
+        return $this->render("list",[
+            "orderList"=>$orderList
+        ]);
+    }
 }

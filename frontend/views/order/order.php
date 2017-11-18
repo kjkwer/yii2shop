@@ -30,7 +30,7 @@
                     <?php endif;?>
                 </li>
                 <li class="line">|</li>
-                <li>我的订单</li>
+                <li><a href="/order/list">我的订单</a></li>
                 <li class="line">|</li>
                 <li>客户服务</li>
 
@@ -93,26 +93,26 @@
                     <tbody>
                     <tr class="cur">
                         <td>
-                            <input type="radio" name="delivery" value="普通快递送货上门" checked="checked" />普通快递送货上门
+                            <input type="radio" name="delivery"" value="1" checked="checked" />普通快递送货上门
                         </td>
                         <td>￥10.00</td>
                         <td>每张订单不满499.00元,运费15.00元, 订单4...</td>
                     </tr>
                     <tr>
 
-                        <td><input type="radio" name="delivery" value="特快专递"/>特快专递</td>
+                        <td><input type="radio" name="delivery" value="2"/>特快专递</td>
                         <td>￥40.00</td>
                         <td>每张订单不满499.00元,运费40.00元, 订单4...</td>
                     </tr>
                     <tr>
 
-                        <td><input type="radio" name="delivery" value="加急快递送货上门"/>加急快递送货上门</td>
+                        <td><input type="radio" name="delivery"  value="3"/>加急快递送货上门</td>
                         <td>￥40.00</td>
                         <td>每张订单不满499.00元,运费40.00元, 订单4...</td>
                     </tr>
                     <tr>
 
-                        <td><input type="radio" name="delivery" value="平邮"/>平邮</td>
+                        <td><input type="radio" name="delivery" value="4"/>平邮</td>
                         <td>￥10.00</td>
                         <td>每张订单不满499.00元,运费15.00元, 订单4...</td>
                     </tr>
@@ -129,19 +129,19 @@
             <div class="pay_select">
                 <table>
                     <tr class="cur">
-                        <td class="col1"><input type="radio" name="pay" value="货到付款" />货到付款</td>
+                        <td class="col1"><input type="radio" name="pay" value="1" />货到付款</td>
                         <td class="col2">送货上门后再收款，支持现金、POS机刷卡、支票支付</td>
                     </tr>
                     <tr>
-                        <td class="col1"><input type="radio" name="pay" value="在线支付" checked/>在线支付</td>
+                        <td class="col1"><input type="radio" name="pay" value="2" checked/>在线支付</td>
                         <td class="col2">即时到帐，支持绝大数银行借记卡及部分银行信用卡</td>
                     </tr>
                     <tr>
-                        <td class="col1"><input type="radio" name="pay" value="上门自提"/>上门自提</td>
+                        <td class="col1"><input type="radio" name="pay" value="3"/>上门自提</td>
                         <td class="col2">自提时付款，支持现金、POS刷卡、支票支付</td>
                     </tr>
                     <tr>
-                        <td class="col1"><input type="radio" name="pay" value="邮局汇款"/>邮局汇款</td>
+                        <td class="col1"><input type="radio" name="pay" value="4"/>邮局汇款</td>
                         <td class="col2">通过快钱平台收款 汇款后1-3个工作日到账</td>
                     </tr>
                 </table>
@@ -206,7 +206,7 @@
                             </li>
                             <li>
                                 <span>运费：</span>
-                                <em>￥10.00</em>
+                                <em >￥<span id="yf">10.00</span></em>
                             </li>
                         </ul>
                     </td>
@@ -220,7 +220,7 @@
 
     <div class="fillin_ft">
         <a href="javascript:;" id="refer"><span>提交订单</span></a>
-        <p>应付总额：<strong>￥<?=sprintf("%.2f",$totalPrice)+10.00?>元</strong></p>
+        <p>应付总额：<strong id="total">￥<?=sprintf("%.2f",$totalPrice)+10.00?>元</strong></p>
     </div>
     </div>
 </form>
@@ -254,23 +254,50 @@
 </div>
 <!-- 底部版权 end -->
 <script type="text/javascript">
+//>>提交表单,发送数据
 $("#refer").click(function () {
     //>>获取收货地址id
     var address_id = $(".address").find("input:checked").val();
+    if (!address_id){
+        alert("请选择收货地址")
+        return;
+    }
     //>>获取送货方式
     var delivery = $(".delivery").find("input:checked").val();
+    if (!delivery){
+        alert("请选择配送方式")
+        return;
+    }
     //>>获取支付方式
     var pay = $(".pay").find("input:checked").val();
+    if (!pay){
+        alert("请选择支付方式")
+        return;
+    }
     //>>用Ajax方式
     $.post("/order/add",{"address_id":address_id,"delivery":delivery,"pay":pay},function (data) {
         if (data){
-            //>>订单提交成功,跳转页面
-            window.location.href="/order/list";
+            alert("创建订单失败"+data);
         }else {
-            //>>提交失败
-            alert("提交失败");
+            window.location.href="/order/success";
         }
     })
+})
+//>>动态获取运费
+$(".delivery input").click(function () {
+    var text = $(this).val();
+    var price;
+    if (text == "普通快递送货上门"){
+        price = 10.00;
+    }else if (text == "特快专递"){
+        price = 40.00;
+    }else if (text == "加急快递送货上门"){
+        price = 40.00;
+    }else if (text == "平邮"){
+        price = 10.00;
+    }
+    $("#yf").text(price)
+    $("#total").text(<?=$totalPrice?>+price)
 })
 </script>
 </body>

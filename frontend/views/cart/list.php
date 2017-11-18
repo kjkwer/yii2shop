@@ -30,7 +30,7 @@
                     <?php endif;?>
                 </li>
                 <li class="line">|</li>
-                <li>我的订单</li>
+                <li><a href="/order/list">我的订单</a></li>
                 <li class="line">|</li>
                 <li>客户服务</li>
 

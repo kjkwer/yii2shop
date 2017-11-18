@@ -31,7 +31,7 @@
                     <?php endif;?>
                 </li>
                 <li class="line">|</li>
-                <li>我的订单</li>
+                <li><a href="/order/list">我的订单</a></li>
                 <li class="line">|</li>
                 <li>客户服务</li>
 
@@ -89,7 +89,7 @@
                     <div class="uclist mt10">
                         <ul class="list1 fl">
                             <li><a href="">用户信息></a></li>
-                            <li><a href="">我的订单></a></li>
+                            <li><a href="<?=\yii\helpers\Url::to(["/order/list"])?>">我的订单></a></li>
                             <li><a href="<?=\yii\helpers\Url::to(["/address/list"])?>">收货地址></a></li>
                             <li><a href="">我的收藏></a></li>
                         </ul>

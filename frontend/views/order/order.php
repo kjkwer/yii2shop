@@ -287,17 +287,17 @@ $("#refer").click(function () {
 $(".delivery input").click(function () {
     var text = $(this).val();
     var price;
-    if (text == "普通快递送货上门"){
+    if (text == "1"){
         price = 10.00;
-    }else if (text == "特快专递"){
+    }else if (text == "2"){
         price = 40.00;
-    }else if (text == "加急快递送货上门"){
+    }else if (text == "3"){
         price = 40.00;
-    }else if (text == "平邮"){
+    }else if (text == "4"){
         price = 10.00;
     }
     $("#yf").text(price)
-    $("#total").text(<?=$totalPrice?>+price)
+    $("#total").text(price+<?=$totalPrice?>)
 })
 </script>
 </body>

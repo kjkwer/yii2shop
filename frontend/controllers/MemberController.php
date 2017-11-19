@@ -111,7 +111,6 @@ class MemberController extends Controller
     }
     //>>验证手机验证码
     public function actionCheckTelcaptcha(){
-        //echo 111;
         //>>接收参数
         $tel = \Yii::$app->request->get("tel");
         $code = \Yii::$app->request->get("tel_captcha");
@@ -131,10 +130,5 @@ class MemberController extends Controller
             return "false";
         }
         return "true";
-    }
-    public function actionTest(){
-        $redis = new \Redis();
-        $redis->connect("127.0.0.1");
-        var_dump($redis->get("tel_13551275376"));
     }
 }

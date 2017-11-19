@@ -439,7 +439,7 @@
                 <?php foreach ($goodsList as $goods):?>
                     <li>
                         <dl>
-                            <dt><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><img src="<?="http://www.yii2shopadmin.com".$goods->logo?>" alt="" /></a></dt>
+                            <dt><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><img src="<?=Yii::$app->params['adminImage'].$goods->logo?>" alt="" /></a></dt>
                             <dd><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><?=$goods->name?></a></dt>
                             <dd><strong><?=$goods->shop_price?></strong></dt>
                             <dd><a href="<?=\yii\helpers\Url::to(["/index/goods-intro","id"=>$goods->id])?>"><em>已有10人评价</em></a></dt>

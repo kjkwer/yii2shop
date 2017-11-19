@@ -316,7 +316,7 @@
                         <ul>
                             <?php foreach ($goodsGalleryList as $k=>$goodsGallery):?>
                                 <li <?=$k==0?"class='cur'":""?>>
-                                    <a <?=$k==0?"class='zoomThumbActive'":""?> href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=Yii::$app->params['adminImage'].$goodsGallery->path?>',largeimage: '<?="http://www.yii2shopadmin.com".$goodsGallery->path?>'}"><img src="<?=Yii::$app->params['adminImage'].$goodsGallery->path?>"></a>
+                                    <a <?=$k==0?"class='zoomThumbActive'":""?> href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=Yii::$app->params['adminImage'].$goodsGallery->path?>',largeimage: '<?=Yii::$app->params['adminImage'].$goodsGallery->path?>'}"><img src="<?=Yii::$app->params['adminImage'].$goodsGallery->path?>"></a>
                                 </li>
                             <?php endforeach;?>
                         </ul>

@@ -8,16 +8,12 @@
 
 namespace frontend\controllers;
 
-
 use backend\models\Goods;
 use backend\models\GoodsCategory;
 use backend\models\GoodsGallery;
 use backend\models\GoodsIntro;
-use frontend\models\Cart;
 use yii\data\Pagination;
-use yii\helpers\Url;
 use yii\web\Controller;
-use yii\web\Request;
 
 class IndexController extends Controller
 {
@@ -130,5 +126,13 @@ class IndexController extends Controller
             "goodsGalleryList"=>$goodsGalleryList,
             "goodsIntros"=>$goodsIntros
         ]);
+    }
+    /**
+     * 优化,页面静态化,用户登录状态使用Ajax方式获取
+     */
+    public function actionUserStatus(){
+        $login = !\Yii::$app->user->isGuest;
+        $username = $login?\Yii::$app->user->identity->username:"";
+        return json_encode(["login"=>$login,"username"=>$username]);
     }
 }

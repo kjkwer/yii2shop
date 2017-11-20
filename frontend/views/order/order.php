@@ -215,7 +215,6 @@
             </table>
         </div>
         <!-- 商品清单 end -->
-
     </div>
 
     <div class="fillin_ft">

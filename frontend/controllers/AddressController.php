@@ -89,7 +89,7 @@ class AddressController extends Controller
         $address->status = 1;
         $address->save();
         //>>修改其余地址状态
-        $addreses = Address::find()->where(["!=","id",$address->id])->all();
+        $addreses = Address::find()->where(["!=","id",$address->id])->andWhere(["=","memeber_id",\Yii::$app->user->getId()])->all();
         foreach ($addreses as $addre){
             $addre->status = 0;
             $addre->save();

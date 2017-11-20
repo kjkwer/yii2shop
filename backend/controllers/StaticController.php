@@ -26,7 +26,7 @@ class StaticController extends Controller
     }
     //>>静态化商品详情页
     public function actionCreateGoods($id){
-//>>获取商品信息
+        //>>获取商品信息
         $goodsMessage = Goods::findOne(["id"=>$id]);
         //>>获取商品相册的图片
         $goodsGalleryList = GoodsGallery::find()->where(["goods_id"=>$goodsMessage->id])->orderBy("id desc")->all();
@@ -48,6 +48,7 @@ class StaticController extends Controller
         //>>将内容存放至静态页面
         $fileName = \Yii::getAlias("@frontend/views/index/goodsIntro/goodsIntro_".$id.".html");
         file_put_contents($fileName,$goodsIntro);
-        echo "商品详情页静态化成功";
+        //>>静态化完成跳转回列表页
+        return $this->redirect("/goods/list");
     }
 }

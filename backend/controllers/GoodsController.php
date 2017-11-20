@@ -17,6 +17,7 @@ use backend\models\GoodsIntro;
 use backend\models\GoodsSearchForm;
 use kucha\ueditor\UEditorAction;
 use yii\data\Pagination;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Request;
 use yii\web\UploadedFile;
@@ -108,9 +109,11 @@ class GoodsController extends Controller
                 $goodsIntroModel = GoodsDayCount::findOne(["day"=>$day]);
                 $goodsIntroModel->count = $num;
                 $goodsIntroModel->save();
+                //>>添加成功静态化页面
+                $goodsModel->createGoods($goodsModel->id);
                 //>>保存成功,跳转页面
                 \Yii::$app->session->setFlash("success","添加成功");
-                return $this->redirect("list");
+                return $this->redirect(Url::to(["images-list","id"=>$goodsModel->id]));
             }else{
                 //>>验证失败,打印错误信息
                 var_dump($goodsModel->getErrors());

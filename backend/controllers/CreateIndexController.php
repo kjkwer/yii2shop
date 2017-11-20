@@ -16,7 +16,7 @@ class CreateIndexController extends Controller
     //>>生成静态首页
     public function actionCreateIndex(){
         $indexStatus = $this->renderPartial("@frontend/views/index/index");
-        $fileName = \Yii::getAlias("@frontend/web/index.html");
+        $fileName = \Yii::getAlias("@frontend/views/index/index.html");
         file_put_contents($fileName,$indexStatus);
         echo "生成静态首页成功";
     }

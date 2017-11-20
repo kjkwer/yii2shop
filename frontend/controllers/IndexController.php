@@ -20,7 +20,7 @@ class IndexController extends Controller
     //>>显示商城首页
     public function actionIndex(){
         //>>显示首页
-        return $this->render("index");
+        return $this->render("index.html");
     }
     //>>显示商品列表页
     public function actionGoodsList($id){

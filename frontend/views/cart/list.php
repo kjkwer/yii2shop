@@ -22,12 +22,8 @@
         </div>
         <div class="topnav_right fr">
             <ul>
-                <li>您好，欢迎来到京西！
-                    <?php if (Yii::$app->user->isGuest):?>
-                        [<a href="/member/login">登录</a>] [<a href="/member/register">免费注册</a>]
-                    <?php else:?>
-                        [<?=Yii::$app->user->identity->username?>] [<a href="/member/logout">注销登录</a>]
-                    <?php endif;?>
+                <li id="userStatus">您好，欢迎来到京西！
+                    [<a href="/member/login">登录</a>] [<a href="/member/register">免费注册</a>]
                 </li>
                 <li class="line">|</li>
                 <li><a href="/order/list">我的订单</a></li>
@@ -183,6 +179,14 @@
                     alert("删除失败")
                 }
             })
+        }
+    })
+    /**
+     * 通过Ajax获取用户的登录信息
+     */
+    $.getJSON("/index/user-status",function (data) {
+        if (data.login){
+            $("#userStatus").html('[欢迎大佬<span style="color: red">'+data.username+'</span>光临本店] [<a href="/member/logout">注销登录</a>]')
         }
     })
 </script>

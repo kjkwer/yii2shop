@@ -24,12 +24,8 @@
         </div>
         <div class="topnav_right fr">
             <ul>
-                <li>您好，欢迎来到京西！
-                    <?php if (Yii::$app->user->isGuest):?>
-                        [<a href="/member/login">登录</a>] [<a href="/member/register">免费注册</a>]
-                    <?php else:?>
-                        [<?=Yii::$app->user->identity->username?>] [<a href="/member/logout">注销登录</a>]
-                    <?php endif;?>
+                <li id="userStatus">您好，欢迎来到京西！
+                    [<a href="/member/login">登录</a>] [<a href="/member/register">免费注册</a>]
                 </li>
                 <li class="line">|</li>
                 <li><a href="/order/list">我的订单</a></li>
@@ -80,12 +76,8 @@
                     <b></b>
                 </dt>
                 <dd>
-                    <div class="prompt">
-                        <?php if (Yii::$app->user->isGuest):?>
-                            您好，请<a href="/memeber/login">登录</a>
-                        <?php else:?>
-                            会员:<?=Yii::$app->user->identity->username?>
-                        <?php endif;?>
+                    <div class="prompt login">
+                        您好，请<a href="/memeber/login">登录</a>
                     </div>
                     <div class="uclist mt10">
                         <ul class="list1 fl">
@@ -934,6 +926,15 @@
             }
         })
     })
+/**
+ * 通过Ajax获取用户的登录信息
+ */
+$.getJSON("/index/user-status",function (data) {
+    if (data.login){
+        $("#userStatus").html('[欢迎大佬<span style="color: red">'+data.username+'</span>光临本店] [<a href="/member/logout">注销登录</a>]')
+        $(".login").html('会员:<span style="color: red">'+data.username+'</span>')
+    }
+})
 </script>
 </body>
 </html>

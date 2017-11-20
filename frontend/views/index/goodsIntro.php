@@ -94,7 +94,7 @@
                     <b></b>
                 </dt>
                 <dd>
-                    <div class="prompt">
+                    <div class="prompt login">
                         您好，请<a href="/memeber/login">登录</a>
                     </div>
                     <div class="uclist mt10">
@@ -722,7 +722,7 @@
     $.getJSON("/index/user-status",function (data) {
         if (data.login){
             $("#userStatus").html('[欢迎大佬<span style="color: red">'+data.username+'</span>光临本店] [<a href="/member/logout">注销登录</a>]')
-            $(".prompt").html('会员:<span style="color: red">'+data.username+'</span>')
+            $(".login").html('会员:<span style="color: red">'+data.username+'</span>')
         }
     })
     /**

@@ -156,7 +156,7 @@
                 if (data==1){
                     alert("短信发送成功")
                 }else {
-                    alert("短信发送失败,请稍后再试")
+                    alert(data)
                 }
             })
         }

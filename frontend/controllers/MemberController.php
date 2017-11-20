@@ -89,7 +89,18 @@ class MemberController extends Controller
     }
     //>>发送短信验证
     public function actionCheckSms(){
+        //链接redis
+        $redis = new \Redis();
+        $redis->connect("127.0.0.1");
+        //>>获取电话
         $tel = \Yii::$app->request->get("tel");
+        //>>短信已发送时间
+        if ($redis->get("tel_".$tel)){
+            $time = 1800-$redis->ttl("tel_".$tel);
+            if ($time<=60){
+                return "短信发送过于频繁,请稍后再试";
+            }
+        }
         $code = rand(100000,999999);
         $response = Sms::sendSms(
             "林锋kjkwer", // 短信签名
@@ -101,12 +112,10 @@ class MemberController extends Controller
         );
         //>>保存信息到redis
         if ($response->Message=="OK"){
-            $redis = new \Redis();
-            $redis->connect("127.0.0.1");
             $redis->set("tel_".$tel,$code,1800);
             return 1;
         }else{
-            return 0;
+            return "短信发送失败,请稍后再试";
         }
     }
     //>>验证手机验证码

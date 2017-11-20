@@ -30,7 +30,7 @@ class Address extends ActiveRecord
         }
         if ($this->save()){
             if ($this->status==1){
-                $addreses = self::find()->where(["!=","id",$this->id])->all();
+                $addreses = self::find()->where(["!=","id",$this->id])->andWhere(["=","memeber_id",\Yii::$app->user->getId()])->all();
                 foreach ($addreses as $address){
                     $address->status = 0;
                     $address->save();

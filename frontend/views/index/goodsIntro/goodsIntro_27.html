@@ -100,8 +100,8 @@
                     <div class="uclist mt10">
                         <ul class="list1 fl">
                             <li><a href="">用户信息></a></li>
-                            <li><a href="<?=\yii\helpers\Url::to(["/order/list"])?>">我的订单></a></li>
-                            <li><a href="<?=\yii\helpers\Url::to(["/address/list"])?>">收货地址></a></li>
+                            <li><a href="/order/list">我的订单></a></li>
+                            <li><a href="/address/list">收货地址></a></li>
                             <li><a href="">我的收藏></a></li>
                         </ul>
 
@@ -131,7 +131,7 @@
         <div class="cart fl">
             <dl>
                 <dt>
-                    <a href="<?=\yii\helpers\Url::to(["/cart/list"])?>">去购物车结算</a>
+                    <a href="/cart/list">去购物车结算</a>
                     <b></b>
                 </dt>
                 <dd>
@@ -156,8 +156,7 @@
                 <em></em>
             </div>
 
-            <?=\backend\models\GoodsCategory::categoryNavToRedis()?>
-
+            <div class="cat_bd"><div class="cat item1"><h3><a href="/index/goods-list?id=26">服装商城</a></h3><div class="cat_detail"><dl class="dl_1st"><dt><a href="/index/goods-list?id=32">外套</a></dt><dd><a href="/index/goods-list?id=46">123</a><a href="/index/goods-list?id=30">皮衣</a><a href="/index/goods-list?id=29">夹克</a><a href="/index/goods-list?id=28">羽绒服</a></dd></dl></div></div><div class="cat item1"><h3><a href="/index/goods-list?id=31">电子产品</a></h3><div class="cat_detail"><dl class="dl_1st"><dt><a href="/index/goods-list?id=33">电脑外设</a></dt><dd><a href="/index/goods-list?id=36">耳机</a><a href="/index/goods-list?id=35">鼠标</a><a href="/index/goods-list?id=34">键盘</a></dd></dl><dl class="dl_1st"><dt><a href="/index/goods-list?id=22">智能商城</a></dt><dd><a href="/index/goods-list?id=25">平板电脑</a><a href="/index/goods-list?id=24">手机</a><a href="/index/goods-list?id=23">笔记本电脑</a></dd></dl><dl class="dl_1st"><dt><a href="/index/goods-list?id=18">家电</a></dt><dd><a href="/index/goods-list?id=21">电视</a><a href="/index/goods-list?id=20">洗衣机</a><a href="/index/goods-list?id=19">冰箱</a></dd></dl></div></div><div class="cat item1"><h3><a href="/index/goods-list?id=37">我的世界</a></h3><div class="cat_detail"><dl class="dl_1st"><dt><a href="/index/goods-list?id=40">三大as</a></dt><dd></dd></dl><dl class="dl_1st"><dt><a href="/index/goods-list?id=39">大大松</a></dt><dd></dd></dl><dl class="dl_1st"><dt><a href="/index/goods-list?id=38">飒飒</a></dt><dd><a href="/index/goods-list?id=43">三大as</a><a href="/index/goods-list?id=42">大蒜的撒</a><a href="/index/goods-list?id=41">大三大四</a></dd></dl></div></div></div>
         </div>
         <!--  商品分类部分 end-->
 
@@ -185,7 +184,7 @@
 <div class="main w1210 mt10 bc">
     <!-- 面包屑导航 start -->
     <div class="breadcrumb">
-        <h2>当前位置：<a href="<?=\yii\helpers\Url::to(["/index/goods-list","id"=>$oneCategory->id])?>"><?=$oneCategory->name?></a> > <a href="<?=\yii\helpers\Url::to(["/index/goods-list","id"=>$twoCategory->id])?>"><?=$twoCategory->name?></a> > <a href="<?=\yii\helpers\Url::to(["/index/goods-list","id"=>$threeCategory->id])?>"><?=$threeCategory->name?></a> > <?=$goodsMessage->name?></h2>
+        <h2>当前位置：<a href="/index/goods-list?id=31">电子产品</a> > <a href="/index/goods-list?id=22">智能商城</a> > <a href="/index/goods-list?id=24">手机</a> > 华为 P9 全网通 3GB+32GB版 </h2>
     </div>
     <!-- 面包屑导航 end -->
 
@@ -289,13 +288,13 @@
     <div class="goods_content fl mt10 ml10">
         <!-- 商品概要信息 start -->
         <div class="summary">
-            <h3><strong><?=$goodsMessage->name?></strong></h3>
+            <h3><strong>华为 P9 全网通 3GB+32GB版 </strong></h3>
 
             <!-- 图片预览区域 start -->
             <div class="preview fl">
                 <div class="midpic">
-                    <a href="<?=Yii::$app->params['adminImage'].$goodsMessage->logo?>" class="jqzoom" rel="gal1">   <!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
-                        <img src="<?=Yii::$app->params['adminImage'].$goodsMessage->logo?>" width="350px" height="350px" alt="" />               <!-- 第一幅图片的中图 -->
+                    <a href="http://yii2shop.admin.kjkwer.cn/goods_logos/5a085ccf98442.png" class="jqzoom" rel="gal1">   <!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
+                        <img src="http://yii2shop.admin.kjkwer.cn/goods_logos/5a085ccf98442.png" width="350px" height="350px" alt="" />               <!-- 第一幅图片的中图 -->
                     </a>
                 </div>
 
@@ -306,12 +305,19 @@
                     <a href="javascript:;" id="forward" class="on"></a>
                     <div class="smallpic_wrap">
                         <ul>
-                            <?php foreach ($goodsGalleryList as $k=>$goodsGallery):?>
-                                <li <?=$k==0?"class='cur'":""?>>
-                                    <a <?=$k==0?"class='zoomThumbActive'":""?> href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=Yii::$app->params['adminImage'].$goodsGallery->path?>',largeimage: '<?=Yii::$app->params['adminImage'].$goodsGallery->path?>'}"><img src="<?=Yii::$app->params['adminImage'].$goodsGallery->path?>"></a>
+                                                            <li class='cur'>
+                                    <a class='zoomThumbActive' href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: 'http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a0861394a0c0.png',largeimage: 'http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a0861394a0c0.png'}"><img src="http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a0861394a0c0.png"></a>
                                 </li>
-                            <?php endforeach;?>
-                        </ul>
+                                                            <li >
+                                    <a  href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: 'http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a086138c4d7b.png',largeimage: 'http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a086138c4d7b.png'}"><img src="http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a086138c4d7b.png"></a>
+                                </li>
+                                                            <li >
+                                    <a  href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: 'http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a0861386a046.png',largeimage: 'http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a0861386a046.png'}"><img src="http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a0861386a046.png"></a>
+                                </li>
+                                                            <li >
+                                    <a  href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: 'http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a086138498b7.png',largeimage: 'http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a086138498b7.png'}"><img src="http://yii2shop.admin.kjkwer.cn/goods_preview/27_5a086138498b7.png"></a>
+                                </li>
+                                                    </ul>
                     </div>
 
                 </div>
@@ -321,15 +327,15 @@
             <!-- 商品基本信息区域 start -->
             <div class="goodsinfo fl ml10">
                 <ul>
-                    <li><span>商品编号： </span><?=$goodsMessage->sn?></li>
-                    <li class="market_price"><span>定价：</span><em>￥<?=$goodsMessage->market_price?></em></li>
-                    <li class="shop_price"><span>本店价：</span> <strong>￥<?=$goodsMessage->shop_price?></strong> <a href="">(降价通知)</a></li>
-                    <li><span>上架时间：</span><?=date("Y-m-d",$goodsMessage->create_time)?></li>
+                    <li><span>商品编号： </span>2017111200005</li>
+                    <li class="market_price"><span>定价：</span><em>￥2500.00</em></li>
+                    <li class="shop_price"><span>本店价：</span> <strong>￥2400.00</strong> <a href="">(降价通知)</a></li>
+                    <li><span>上架时间：</span>2017-11-12</li>
                     <li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
                 </ul>
                 <form action="/cart/add" method="post" class="choose">
-                    <input name="_csrf-frontend" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
-                    <input type="hidden" name="goods_id" value="<?=$goodsMessage->id?>">
+                    <input name="_csrf-frontend" type="hidden" id="_csrf" value="1MpUrSEF0L-KGLC9zzBThcm26c9Xt1NEkvKk67fcSqj5LTxbrAKN_2MFXp2xA3DzAu5dLv4tYTvwyFaW1X-q9Q==">
+                    <input type="hidden" name="goods_id" value="27">
                     <ul>
 
                         <li>
@@ -375,10 +381,10 @@
                 <div class="introduce detail_div none">
                     <div class="attr mt15">
                         <ul>
-                            <li><span>商品名称：</span><?=$goodsMessage->name?></li>
-                            <li><span>商品编号：</span><?=$goodsMessage->sn?></li>
-                            <li><span>品牌：</span><?=$goodsMessage->brand->name?></li>
-                            <li><span>上架时间：</span><?=date("Y-m-d H:i:s",$goodsMessage->create_time)?></li>
+                            <li><span>商品名称：</span>华为 P9 全网通 3GB+32GB版 </li>
+                            <li><span>商品编号：</span>2017111200005</li>
+                            <li><span>品牌：</span>华为</li>
+                            <li><span>上架时间：</span>2017-11-12 22:38:37</li>
                             <li><span>商品毛重：</span>未知</li>
                             <li><span>商品产地：</span>未知</li>
                             <li><span>显卡：</span>未知</li>
@@ -391,8 +397,7 @@
 
                     <div class="desc mt10">
                         <!-- 此处的内容 一般是通过在线编辑器添加保存到数据库，然后直接从数据库中读出 -->
-                            <?=$goodsIntros->content?>
-                    </div>
+                            <p><img src="/goods_intro_images/20171112/1510497511129851.png" title="1510497511129851.png"/></p><p><img src="/goods_intro_images/20171112/1510497511314561.png" title="1510497511314561.png"/></p><p><img src="/goods_intro_images/20171112/1510497511690489.png" title="1510497511690489.png"/></p><p><img src="/goods_intro_images/20171112/1510497512214215.png" title="1510497512214215.png"/></p><p><br/></p>                    </div>
                 </div>
                 <!-- 商品介绍 end -->
 
@@ -730,7 +735,7 @@
      */
     $("p img").each(function () {
         var srcPath = $(this).attr("src");
-        $(this).attr("src","<?=Yii::$app->params['adminImage']?>"+srcPath)
+        $(this).attr("src","http://yii2shop.admin.kjkwer.cn"+srcPath)
     })
 </script>
 </body>

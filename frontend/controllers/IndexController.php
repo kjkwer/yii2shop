@@ -107,25 +107,7 @@ class IndexController extends Controller
     }
     //>>显示商品详情页
     public function actionGoodsIntro($id){
-        //>>获取商品信息
-        $goodsMessage = Goods::findOne(["id"=>$id]);
-        //>>获取商品相册的图片
-        $goodsGalleryList = GoodsGallery::find()->where(["goods_id"=>$goodsMessage->id])->orderBy("id desc")->all();
-        //>>查询到商品详情
-        $goodsIntros = GoodsIntro::findOne(["goods_id"=>$goodsMessage->id]);
-        //>>查询该商品的分类层级
-        $threeCategory = GoodsCategory::findOne(["id"=>$goodsMessage->goods_category_id]);
-        $twoCategory = GoodsCategory::findOne(["id"=>$threeCategory->parent_id]);
-        $oneCategory = GoodsCategory::findOne(["id"=>$twoCategory->parent_id]);
-        //>>显示视图
-        return $this->render("goodsIntro",[
-            "goodsMessage"=>$goodsMessage,
-            "threeCategory"=>$threeCategory,
-            "twoCategory"=>$twoCategory,
-            "oneCategory"=>$oneCategory,
-            "goodsGalleryList"=>$goodsGalleryList,
-            "goodsIntros"=>$goodsIntros
-        ]);
+        return $this->render("\\goodsIntro/goodsIntro_".$id.".html");
     }
     /**
      * 优化,页面静态化,用户登录状态使用Ajax方式获取

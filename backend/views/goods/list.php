@@ -51,6 +51,7 @@ header('content-type:text/html;charset=utf-8');
                             <?php endif;?>
                             <?php if (Yii::$app->user->can("goods/images-list")):?>
                             <?=\yii\bootstrap\Html::a("图库",\yii\helpers\Url::to(["/goods/images-list","id"=>$goods->id]),["class"=>"btn btn-default btn-xs"])?>
+                            <?=\yii\bootstrap\Html::a("静态化页面",\yii\helpers\Url::to(["/static/create-goods","id"=>$goods->id]),["class"=>"btn btn-info btn-xs"])?>
                             <?php endif;?>
                         </td>
                     </tr>

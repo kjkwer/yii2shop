@@ -107,7 +107,7 @@ class IndexController extends Controller
     }
     //>>显示商品详情页
     public function actionGoodsIntro($id){
-        return $this->render("\\goodsIntro/goodsIntro_".$id.".html");
+        return $this->render("goodsIntro/goodsIntro_".$id.".html");
     }
     /**
      * 优化,页面静态化,用户登录状态使用Ajax方式获取

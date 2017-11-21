@@ -94,7 +94,7 @@
                     <b></b>
                 </dt>
                 <dd>
-                    <div class="prompt">
+                    <div class="prompt login">
                         您好，请<a href="/memeber/login">登录</a>
                     </div>
                     <div class="uclist mt10">
@@ -334,7 +334,7 @@
                     <li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
                 </ul>
                 <form action="/cart/add" method="post" class="choose">
-                    <input name="_csrf-frontend" type="hidden" id="_csrf" value="1MpUrSEF0L-KGLC9zzBThcm26c9Xt1NEkvKk67fcSqj5LTxbrAKN_2MFXp2xA3DzAu5dLv4tYTvwyFaW1X-q9Q==">
+                    <input name="_csrf-frontend" type="hidden" id="_csrf" value="h5Flt42sZjKacrGOychR2XjOyLU-osRE9gFnFN-AduaTPNPFQiyaQlgds4hwURd9o8LM_4TbRRkQA9y2zbT9YA==">
                     <input type="hidden" name="goods_id" value="27">
                     <ul>
 
@@ -727,13 +727,13 @@
     $.getJSON("/index/user-status",function (data) {
         if (data.login){
             $("#userStatus").html('[欢迎大佬<span style="color: red">'+data.username+'</span>光临本店] [<a href="/member/logout">注销登录</a>]')
-            $(".prompt").html('会员:<span style="color: red">'+data.username+'</span>')
+            $(".login").html('会员:<span style="color: red">'+data.username+'</span>')
         }
     })
     /**
      * 商品详情中图片的路径
      */
-    $("p img").each(function () {
+    $(".desc img").each(function () {
         var srcPath = $(this).attr("src");
         $(this).attr("src","http://yii2shop.admin.kjkwer.cn"+srcPath)
     })

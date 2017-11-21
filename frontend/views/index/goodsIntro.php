@@ -728,7 +728,7 @@
     /**
      * 商品详情中图片的路径
      */
-    $("desc img").each(function () {
+    $(".desc img").each(function () {
         var srcPath = $(this).attr("src");
         $(this).attr("src","<?=Yii::$app->params['adminImage']?>"+srcPath)
     })

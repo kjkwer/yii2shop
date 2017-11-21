@@ -17,6 +17,7 @@ use yii\web\Controller;
 
 class StaticController extends Controller
 {
+    public $enableCsrfValidation=false;
     //>>生成静态首页
     public function actionCreateIndex(){
         $indexStatus = $this->renderPartial("@frontend/views/index/index");
@@ -25,7 +26,8 @@ class StaticController extends Controller
         echo "生成静态首页成功";
     }
     //>>静态化商品详情页
-    public function actionCreateGoods($id){
+    public function actionCreateGoods(){
+        $id = \Yii::$app->request->post("id");
         //>>获取商品信息
         $goodsMessage = Goods::findOne(["id"=>$id]);
         //>>获取商品相册的图片
@@ -49,6 +51,6 @@ class StaticController extends Controller
         $fileName = \Yii::getAlias("@frontend/views/index/goodsIntro/goodsIntro_".$id.".html");
         file_put_contents($fileName,$goodsIntro);
         //>>静态化完成跳转回列表页
-        return $this->redirect("/goods/list");
+        return 1;
     }
 }

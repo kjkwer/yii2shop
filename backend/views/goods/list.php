@@ -51,7 +51,7 @@ header('content-type:text/html;charset=utf-8');
                             <?php endif;?>
                             <?php if (Yii::$app->user->can("goods/images-list")):?>
                             <?=\yii\bootstrap\Html::a("图库",\yii\helpers\Url::to(["/goods/images-list","id"=>$goods->id]),["class"=>"btn btn-default btn-xs"])?>
-                            <?=\yii\bootstrap\Html::a("静态化页面",\yii\helpers\Url::to(["/static/create-goods","id"=>$goods->id]),["class"=>"btn btn-info btn-xs"])?>
+                            <?=\yii\bootstrap\Html::button("静态化页面",["class"=>"static btn btn-info btn-xs"])?>
                             <?php endif;?>
                         </td>
                     </tr>
@@ -77,6 +77,7 @@ header('content-type:text/html;charset=utf-8');
  * @var $this \yii\web\View
  */
 $url = \yii\helpers\Url::to("/goods/del");
+$url1 = \yii\helpers\Url::to("/static/create-goods");
 $this->registerJs(<<<JS
 //>>给删除按钮添加点击事件
 $(".del").click(function() {
@@ -92,6 +93,17 @@ $(".del").click(function() {
             }
         })
     }
+})
+//>>页面静态化
+$(".static").click(function() {
+    var id = $(this).closest("tr").find("td:first-child").text();
+    $.post("{$url1}",{"id":id},function(data) {
+        if (data==1){
+            alert("静态化成功");
+        }else {
+            alert(data);
+        }
+    })
 })
 JS
 );

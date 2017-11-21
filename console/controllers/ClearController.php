@@ -17,7 +17,7 @@ class ClearController extends Controller
             $time = time();
             $sql = 'update `order` set status=0 WHERE status=1 AND '.$time.'-`create_time`>60';
             \Yii::$app->db->createCommand($sql)->execute();//执行sql命令
-            sleep(1);  //每隔30秒执行一致
+            sleep(1);  //每隔1秒执行一致
         }
     }
 }

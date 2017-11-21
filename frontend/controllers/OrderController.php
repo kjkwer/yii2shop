@@ -10,6 +10,8 @@ namespace frontend\controllers;
 
 
 use backend\models\Goods;
+use backend\models\GoodsCategory;
+use Codeception\Module\Redis;
 use frontend\models\Address;
 use frontend\models\Cart;
 use frontend\models\Order;
@@ -95,28 +97,34 @@ class OrderController extends Controller
         $order->status = 1;
         $order->trade_no = uniqid();
         $order->create_time = time();
+        //var_dump($order);exit();
         //>>开启事务
         $transaction = \Yii::$app->db->beginTransaction();
         try{
+            //>>链接redis
+            $redis = new \Redis();
+            $redis->connect("127.0.0.1");
             if ($order->save()){
                 //>>创建订单详情表
                 foreach ($carts as $cart){
-                    $orderGoods = new OrderGoods();
-                    $goods = Goods::findOne(["id"=>$cart->goods_id]);
-                    if ($cart->amount > $goods->stock){
-                        throw new Exception($goods->name."库存不足");
+                    //>>将redis中的商品数量先减再取
+                    $stock = $redis->decrBy("stock_".$cart->goods_id,$cart->amount);
+                    //>>记录redis操作用于回滚redis的数据
+                    $redis->hSet("order_".$order->id,$cart->goods_id,$cart->amount);
+                    //>>判断库存是否足够
+                    if($stock<0){
+                        throw new Exception($cart->goodsMessage->name."库存不足");
                     }
+                    //>>创建订单详情对象
+                    $orderGoods = new OrderGoods();
                     $orderGoods->order_id = $order->id;
                     $orderGoods->goods_id = $cart->goods_id;
-                    $orderGoods->goods_name = $goods->name;
-                    $orderGoods->logo = $goods->logo;
-                    $orderGoods->price = $goods->shop_price;
+                    $orderGoods->goods_name = $cart->goodsMessage->name;
+                    $orderGoods->logo = $cart->goodsMessage->logo;
+                    $orderGoods->price = $cart->goodsMessage->shop_price;
                     $orderGoods->amount = $cart->amount;
-                    $orderGoods->total = $goods->shop_price*$cart->amount;
+                    $orderGoods->total = $cart->goodsMessage->shop_price*$cart->amount;
                     $orderGoods->save();
-                    //>>减少商品库存
-                    $goods->stock -= $orderGoods->amount;
-                    $goods->save();
                 }
                 //删除购物车
                 Cart::deleteAll('member_id='.\Yii::$app->user->id);
@@ -125,7 +133,12 @@ class OrderController extends Controller
             //>>提交事务
             $transaction->commit();
         }catch (Exception $e){
-            //>>回滚
+            //>>redis回滚
+            $decr_stock = $redis->hGetAll("order_".$order->id);
+            foreach ($decr_stock as $goods_id=>$amount){
+                $redis->incrBy("stock_".$goods_id,$amount);
+            }
+            //>>事务回滚
             $transaction->rollBack();
             //>>输出错误信息
             echo $e->getMessage();
@@ -149,5 +162,34 @@ class OrderController extends Controller
         return $this->render("list",[
             "orderList"=>$orderList
         ]);
+    }
+    //>>将商品数量同步至redis中
+    public function actionToRedis(){
+        //>>链接redis
+        $redis = new \Redis();
+        $redis->connect("127.0.0.1");
+        //>>获取所有商品信息
+        $goodsList = Goods::find()->all();
+        foreach ($goodsList as $goods){
+            $redis->set("stock_".$goods->id,$goods->stock);
+        }
+    }
+    //>>将redis中的商品数量同步至数据表中
+    public function actionToTable(){
+        //>>链接redis
+        $redis = new \Redis();
+        $redis->connect("127.0.0.1");
+        //>>获取所有商品信息
+        $goodsList = Goods::find()->all();
+        foreach ($goodsList as $goods){
+            $goods->stock = $redis->get("stock_".$goods->id);
+            $goods->save();
+        }
+    }
+    public function actionTest($id){
+        //>>开启redis
+        $redis = new \Redis();
+        $redis->connect("127.0.0.1");
+        var_dump($redis->get("stock_".$id));
     }
 }

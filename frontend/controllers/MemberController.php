@@ -140,4 +140,14 @@ class MemberController extends Controller
         }
         return "true";
     }
+    //>>发送邮件
+    public function actionSendEmail(){
+        $r = \Yii::$app->mailer->compose()
+            ->setFrom('lilinfeng1024@163.com')
+            ->setTo("lilinfeng1024@163.com")
+            ->setSubject("shisahuhiuduhiudsuduid")
+            ->setHtmlBody("<h1>sakhkshkj</h1>")
+            ->send();
+        echo $r;
+    }
 }

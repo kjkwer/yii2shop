@@ -37,7 +37,7 @@ class LoginForm extends Model
                 $model->save(false);
                 //>>保存session和cookie信息
                 if ($this->rem){
-                    $time = 3600;
+                    $time = 30*24*3600;
                 }else{
                     $time = 0;
                 }

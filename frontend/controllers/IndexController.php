@@ -107,6 +107,30 @@ class IndexController extends Controller
     }
     //>>显示商品详情页
     public function actionGoodsIntro($id){
+        $fileName = \Yii::getAlias("@frontend/views/index/goodsIntro/goodsIntro_".$id.".html");
+        if (!is_file($fileName)){
+            //>>获取商品信息
+            $goodsMessage = Goods::findOne(["id"=>$id]);
+            //>>获取商品相册的图片
+            $goodsGalleryList = GoodsGallery::find()->where(["goods_id"=>$goodsMessage->id])->orderBy("id desc")->all();
+            //>>查询到商品详情
+            $goodsIntros = GoodsIntro::findOne(["goods_id"=>$goodsMessage->id]);
+            //>>查询该商品的分类层级
+            $threeCategory = GoodsCategory::findOne(["id"=>$goodsMessage->goods_category_id]);
+            $twoCategory = GoodsCategory::findOne(["id"=>$threeCategory->parent_id]);
+            $oneCategory = GoodsCategory::findOne(["id"=>$twoCategory->parent_id]);
+            //>>获取页面内容
+            $goodsIntro = $this->renderPartial("@frontend/views/index/goodsIntro.php",[
+                "goodsMessage"=>$goodsMessage,
+                "threeCategory"=>$threeCategory,
+                "twoCategory"=>$twoCategory,
+                "oneCategory"=>$oneCategory,
+                "goodsGalleryList"=>$goodsGalleryList,
+                "goodsIntros"=>$goodsIntros
+            ]);
+            //>>将内容存放至静态页面
+            file_put_contents($fileName,$goodsIntro);
+        }
         return $this->render("goodsIntro/goodsIntro_".$id.".html");
     }
     /**

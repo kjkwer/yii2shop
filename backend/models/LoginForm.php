@@ -43,7 +43,7 @@ class LoginForm extends Model
                 $user->save();
                 //>>密码正确,将用户信息保存在session和cookie中
                 if (is_array($this->rem)){
-                    $duration = 3600;
+                    $duration = 30*24*3600;
                 }else{
                     $duration = 0;
                 }

@@ -1,5 +1,6 @@
 <?php
 namespace console\controllers;
+use backend\models\Goods;
 use yii\console\Controller;
 
 /**
@@ -18,6 +19,29 @@ class ClearController extends Controller
             $sql = 'update `order` set status=0 WHERE status=1 AND '.$time.'-`create_time`>60';
             \Yii::$app->db->createCommand($sql)->execute();//执行sql命令
             sleep(1);  //每隔1秒执行一致
+        }
+    }
+    //>>将redis中的商品数量同步至数据表中
+    public function actionToTable(){
+        //>>链接redis
+        $redis = new \Redis();
+        $redis->connect("127.0.0.1");
+        //>>获取所有商品信息
+        $goodsList = Goods::find()->all();
+        foreach ($goodsList as $goods){
+            $goods->stock = $redis->get("stock_".$goods->id);
+            $goods->save();
+        }
+    }
+    //>>将商品数量同步至redis中
+    public function actionToRedis(){
+        //>>链接redis
+        $redis = new \Redis();
+        $redis->connect("127.0.0.1");
+        //>>获取所有商品信息
+        $goodsList = Goods::find()->all();
+        foreach ($goodsList as $goods){
+            $redis->set("stock_".$goods->id,$goods->stock);
         }
     }
 }

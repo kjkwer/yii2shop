@@ -163,29 +163,7 @@ class OrderController extends Controller
             "orderList"=>$orderList
         ]);
     }
-    //>>将商品数量同步至redis中
-    public function actionToRedis(){
-        //>>链接redis
-        $redis = new \Redis();
-        $redis->connect("127.0.0.1");
-        //>>获取所有商品信息
-        $goodsList = Goods::find()->all();
-        foreach ($goodsList as $goods){
-            $redis->set("stock_".$goods->id,$goods->stock);
-        }
-    }
-    //>>将redis中的商品数量同步至数据表中
-    public function actionToTable(){
-        //>>链接redis
-        $redis = new \Redis();
-        $redis->connect("127.0.0.1");
-        //>>获取所有商品信息
-        $goodsList = Goods::find()->all();
-        foreach ($goodsList as $goods){
-            $goods->stock = $redis->get("stock_".$goods->id);
-            $goods->save();
-        }
-    }
+    //>>测试redis中商品数量
     public function actionTest($id){
         //>>开启redis
         $redis = new \Redis();

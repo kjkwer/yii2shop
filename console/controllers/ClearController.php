@@ -44,4 +44,14 @@ class ClearController extends Controller
             $redis->set("stock_".$goods->id,$goods->stock);
         }
     }
+    //>>同步商品浏览量
+    public function actionSaveGoodsViewTimes(){
+        $redis = new \Redis();
+        $redis->connect("127.0.0.1");
+        $goodsList = Goods::find()->all();
+        foreach ($goodsList as $goods){
+            $goods->view_times = $redis->get("view_times_".$goods->id);
+            $goods->save();
+        }
+    }
 }

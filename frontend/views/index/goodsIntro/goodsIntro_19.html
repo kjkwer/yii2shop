@@ -331,10 +331,10 @@
                     <li class="market_price"><span>定价：</span><em>￥4452.00</em></li>
                     <li class="shop_price"><span>本店价：</span> <strong>￥4542.00</strong> <a href="">(降价通知)</a></li>
                     <li><span>上架时间：</span>2017-11-11</li>
-                    <li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
+                    <li class="view" goods="19"><span>商品浏览量：</span> <strong></strong><a href=""></a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
                 </ul>
                 <form action="/cart/add" method="post" class="choose">
-                    <input name="_csrf-frontend" type="hidden" id="_csrf" value="Q-pKZnZbL3Z3sucdgg34_t_Y3IqgK8sDBTn8bSLpeEVXR_wUudvTBrXd5Rs7lL5aBNTYwBpSSl7jO0fPMN3zww==">
+                    <input name="_csrf-frontend" type="hidden" id="_csrf" value="85NTWbugnuiDWqH_dpApzJYRVR2kQVnITb38vk-O_7xG4Ogsm8dEaGrnuxOntdtCBoE4Q6Jdzj7M0u3sb-0fzA==">
                     <input type="hidden" name="goods_id" value="19">
                     <ul>
 
@@ -729,6 +729,14 @@
             $("#userStatus").html('[欢迎大佬<span style="color: red">'+data.username+'</span>光临本店] [<a href="/member/logout">注销登录</a>]')
             $(".login").html('会员:<span style="color: red">'+data.username+'</span>')
         }
+    })
+    /**
+     * 通过Ajax获取浏览量
+     */
+    //>>获取商品id
+    var id = $(".view").attr("goods");
+    $.getJSON("/index/view-times",{"id":id},function (data) {
+        $(".view").find("strong").text(data);
     })
     /**
      * 商品详情中图片的路径

@@ -98,7 +98,7 @@ $(".del").click(function() {
 $(".static").click(function() {
     var id = $(this).closest("tr").find("td:first-child").text();
     $.post("{$url1}",{"id":id},function(data) {
-        if (!data){
+        if (data==1){
             alert("静态化成功");
         }
     })

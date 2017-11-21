@@ -325,7 +325,7 @@
                     <li class="market_price"><span>定价：</span><em>￥<?=$goodsMessage->market_price?></em></li>
                     <li class="shop_price"><span>本店价：</span> <strong>￥<?=$goodsMessage->shop_price?></strong> <a href="">(降价通知)</a></li>
                     <li><span>上架时间：</span><?=date("Y-m-d",$goodsMessage->create_time)?></li>
-                    <li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
+                    <li class="view" goods="<?=$goodsMessage->id?>"><span>商品浏览量：</span> <strong></strong><a href=""></a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
                 </ul>
                 <form action="/cart/add" method="post" class="choose">
                     <input name="_csrf-frontend" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
@@ -724,6 +724,14 @@
             $("#userStatus").html('[欢迎大佬<span style="color: red">'+data.username+'</span>光临本店] [<a href="/member/logout">注销登录</a>]')
             $(".login").html('会员:<span style="color: red">'+data.username+'</span>')
         }
+    })
+    /**
+     * 通过Ajax获取浏览量
+     */
+    //>>获取商品id
+    var id = $(".view").attr("goods");
+    $.getJSON("/index/view-times",{"id":id},function (data) {
+        $(".view").find("strong").text(data);
     })
     /**
      * 商品详情中图片的路径

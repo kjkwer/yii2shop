@@ -141,4 +141,13 @@ class IndexController extends Controller
         $username = $login?\Yii::$app->user->identity->username:"";
         return json_encode(["login"=>$login,"username"=>$username]);
     }
+    /**
+     * 由于商品详情页已静态化所以需要通过Ajax的方式从redis中获取浏览量
+     */
+    public function actionViewTimes(){
+        $id = \Yii::$app->request->get("id");
+        $redis = new \Redis();
+        $redis->connect("127.0.0.1");
+        return $redis->incr("view_times_".$id);
+    }
 }

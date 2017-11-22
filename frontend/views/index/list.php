@@ -50,7 +50,7 @@
             <div class="search_form">
                 <div class="form_left fl"></div>
                 <form action="/index/search" name="serarch" method="get" class="fl">
-                    <input type="text" class="txt" name="keys" value="<?=$keys?>" /><input type="submit" class="btn" value="搜索" />
+                    <input type="text" class="txt" name="keys" value="<?=isset($keys)?$keys:""?>" /><input type="submit" class="btn" value="搜索" />
                 </form>
                 <div class="form_right fl"></div>
             </div>

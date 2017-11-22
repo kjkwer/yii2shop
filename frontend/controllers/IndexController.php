@@ -160,6 +160,7 @@ class IndexController extends Controller
         //>>显示页面
         return $this->render("list",[
             "goodsList"=>$goodsList,
+            "keys"=>$keys
         ]);
     }
     /**

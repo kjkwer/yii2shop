@@ -94,7 +94,7 @@ class IndexController extends Controller
         //var_dump($child);exit();
         //>>设计分页工具
         $pager = new Pagination();
-        $pager->pageSize = 8;
+        $pager->pageSize = 100;
         $pager->totalCount = $model->where(["in","goods_category_id",$ids])->andWhere(["=","is_on_sale",1])->count();
         //>>获取当前页的商品数据
         $goodsList = $model->limit($pager->limit)->offset($pager->offset)->all();
@@ -102,7 +102,6 @@ class IndexController extends Controller
         //var_dump($goodsList);exit();
         return $this->render("list",[
             "goodsList"=>$goodsList,
-            "pager"=>$pager
         ]);
     }
     //>>显示商品详情页

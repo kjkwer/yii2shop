@@ -12,7 +12,9 @@ use backend\models\Goods;
 use backend\models\GoodsCategory;
 use backend\models\GoodsGallery;
 use backend\models\GoodsIntro;
+use frontend\models\SphinxClient;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 class IndexController extends Controller
@@ -97,9 +99,8 @@ class IndexController extends Controller
         $pager->pageSize = 100;
         $pager->totalCount = $model->where(["in","goods_category_id",$ids])->andWhere(["=","is_on_sale",1])->count();
         //>>获取当前页的商品数据
-        $goodsList = $model->limit($pager->limit)->offset($pager->offset)->all();
+        $goodsList = $model->where(["in","goods_category_id",$ids])->andWhere(["=","is_on_sale",1])->limit($pager->limit)->offset($pager->offset)->all();
         //>>显示页面
-        //var_dump($goodsList);exit();
         return $this->render("list",[
             "goodsList"=>$goodsList,
         ]);
@@ -131,6 +132,32 @@ class IndexController extends Controller
             file_put_contents($fileName,$goodsIntro);
         }
         return $this->render("goodsIntro/goodsIntro_".$id.".html");
+    }
+    //>>搜索商品
+    public function actionSearch(){
+        //>>接收参数
+        $keys = \Yii::$app->request->get("keys");
+        //>>创建模型对象
+        $sphinx = new SphinxClient();
+        $sphinx->SetServer ('127.0.0.1',9312);  //服务器信息
+        $sphinx->SetConnectTimeout (10);  //超时
+        $sphinx->SetArrayResult (true);  //结果以数组形式返回
+        $sphinx->SetMatchMode (SPH_MATCH_EXTENDED2);  //设置匹配模式
+        $sphinx->SetLimits(0,1000);  //分页
+        $info = $keys;  //关键字
+        $res = $sphinx->Query($keys,'goods');
+        //var_dump($res);exit();
+        if (isset($res["matches"])){
+            $ids = ArrayHelper::map($res["matches"],"id","id");
+            $goodsList = Goods::find()->where(["in","id",$ids])->all();
+            //var_dump($goodsList);exit();
+        }else{
+            $goodsList = [];
+        }
+        //>>显示页面
+        return $this->render("list",[
+            "goodsList"=>$goodsList,
+        ]);
     }
     /**
      * 优化,页面静态化,用户登录状态使用Ajax方式获取

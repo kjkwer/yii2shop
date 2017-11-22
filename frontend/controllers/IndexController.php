@@ -137,6 +137,9 @@ class IndexController extends Controller
     public function actionSearch(){
         //>>接收参数
         $keys = \Yii::$app->request->get("keys");
+        if($keys==""){
+            return $this->redirect("index");
+        }
         //>>创建模型对象
         $sphinx = new SphinxClient();
         $sphinx->SetServer ('127.0.0.1',9312);  //服务器信息
